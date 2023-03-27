@@ -16,11 +16,11 @@ class UserRegister(models.Model):
         db_table = 'users'
 
 
-class User(models.Model):
+class Users(models.Model):
     id = models.IntegerField(primary_key=True)
     membership_id = models.IntegerField(unique=True)
     password = models.CharField(max_length=200)
-    
+
     class Meta:
         managed = False
         db_table = 'users'
