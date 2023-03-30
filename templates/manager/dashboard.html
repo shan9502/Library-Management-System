@@ -24,55 +24,54 @@
 </nav>
 <!-- Navbar close-->
 
-<!-- <button class="btn btn-success btn-lg float-right" type="submit">Submit</button> align button right -->
-
-<!--Books Table-->
 <div class="container">
-    <h5 class="card-title text-uppercase mb-0">Books</h5>
+    <h5 class="card-title mb-0">Recent Transactions</h5>
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <!-- Add Book Button -->
-                <a href="addbooks" class="btn btn-danger float-right">Add New Book+</a>
-            </div>
             <div class="table-responsive">
               <form method="post">
                 <table class="table no-wrap user-table mb-0">
                   <thead>
                     <tr>
                       <th scope="col" class="border-0 text-uppercase font-medium pl-4">#</th>
-                      <th scope="col" class="border-0 text-uppercase font-medium">Book Id</th>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Customer Name</th>
                       <th scope="col" class="border-0 text-uppercase font-medium">Book Name</th>
-                      <th scope="col" class="border-0 text-uppercase font-medium">Author</th>
-                      <th scope="col" class="border-0 text-uppercase font-medium">Purchase Date</th>
-                      <th scope="col" class="border-0 text-uppercase font-medium">Current Status</th>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Auther</th>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Date</th>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Action</th>
                       <!-- <th scope="col" class="border-0 text-uppercase font-medium">Manage</th> -->
                     </tr>
                   </thead>
                   <tbody>
-                    {% for book in books %}
                     <tr>
                       <td class="pl-4">1</td>
                       <td>
 
-                          <h5 class="font-medium mb-0">{{book.id}}</h5>
+                          <h5 class="font-medium mb-0"></h5>
+                          <span class="text-muted"></span>
                       </td>
                       <td>
-                          <span class="text-muted">{{book.name}}</span><br>
+                          <span class="text-muted"></span><br>
                       </td>
                       <td>
-                          <span class="text-muted">{{book.author}}</span><br>
+                          <span class="text-muted"></span><br>
                       </td>
                       <td>
-                        <span class="text-muted">{{book.created_at}}</span><br>
+                        
                       </td>
                       
                       <td>
-                        <span class="text-muted">{{book.current_status}}</span><br>
+                        <!-- <select class="form-control category-select" id="exampleFormControlSelect1">
+                          <option>None</option>
+                          <option>Enable</option>
+                          <option>Disable</option>
+                          <option>Delete</option>
+                        </select>-->
+                        
                       </td>
                     </tr>
-                    {% endfor %}
                   </tbody>
                 </table>
               </form>
@@ -81,4 +80,3 @@
     </div>
 </div>
 </div>
-<!--Books Table Close-->

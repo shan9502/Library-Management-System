@@ -1,26 +1,27 @@
 from django.db import models
 
 # Create your models here.
-class UserRegister(models.Model):
-    id = models.IntegerField(primary_key=True)
-    email = models.CharField(unique=True, max_length=30)
-    library_name = models.CharField(max_length=200, blank=True, null=True)
-    address = models.CharField(max_length=600)
-    phone = models.CharField(max_length=30)
-    membership_id = models.IntegerField(unique=True)
-    password = models.CharField(max_length=200)
-    type = models.CharField(max_length=50)
+class Admin(models.Model):
+    name = models.CharField(max_length=250)
+    email = models.CharField(max_length=200)
+    password = models.CharField(max_length=250)
+    created_at = models.DateTimeField(auto_now_add=True,auto_now=False, blank=True)
+    updated_at = models.DateTimeField(auto_now_add=False,auto_now=False, blank=True)
 
     class Meta:
         managed = False
-        db_table = 'users'
+        db_table = 'admin'
 
-
-class Users(models.Model):
-    id = models.IntegerField(primary_key=True)
-    membership_id = models.IntegerField(unique=True)
+class Members(models.Model):
+    membership_no = models.CharField(max_length=20, blank=True, null=True)
+    name = models.CharField(max_length=100)
+    email = models.CharField(max_length=100)
     password = models.CharField(max_length=200)
+    mobile = models.CharField(max_length=25)
+    created_at = models.DateTimeField(auto_now_add=True,auto_now=False, blank=True)
+    updated_at = models.DateTimeField(auto_now_add=False,auto_now=False, blank=True)
+    status = models.IntegerField(default=0)
 
     class Meta:
         managed = False
-        db_table = 'users'
+        db_table = 'members'
