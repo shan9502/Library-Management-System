@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Members, Books
 from users.models import Admin
 from django.views.decorators.csrf import csrf_exempt
+from .forms import AddBookForm
 
 # Create your views here.
 
@@ -32,40 +33,41 @@ def DashboardView(request):
     else:
         return redirect('../user/AdminLogin')
 
+# Book View and Add Books Form
+@csrf_exempt
 def BooksView(request):
     if request.session['Adminlogin'] == True:
         id = request.session['AdminId']
         #print("Admin ID:",id)
         admin = Admin.objects.filter(id=id).first()
         books = Books.objects.all()
-        context = {'books':books, 'admin':admin}    
+        form = AddBookForm()
+        context = {'form': form, 'books':books, 'admin':admin} 
+        if request.method == 'POST':
+            formCheck = AddBookForm(request.POST, request.FILES)
+            if formCheck.is_valid():
+                formCheck.save()
+                #return redirect('../manager/Books')
+                #return render(request,'manager/books.html',context)
         return render(request,'manager/books.html',context)
     else:
-        return redirect('../user/AdminLogin')
+        return redirect('/user/AdminLogin')
 
 # Admin Logout
 def AdminLogout(request):
     if request.session['Adminlogin'] == True:
         request.session['Adminlogin'] = False
         request.session['AdminId'] = None
-        return redirect('../user/AdminLogin')
+        return redirect('/user/AdminLogin')
     else:
-        return redirect('../user/AdminLogin')
-    
-def AddBook(request):
+        return redirect('/user/AdminLogin')
+
+def deleteBookView(request):
     if request.session['Adminlogin'] == True:
-        id = request.session['AdminId']
-        #print("Admin ID:",id)
-        admin = Admin.objects.filter(id=id).first()
         if request.method == 'POST':
-            title = request.POST.get('title')
-            author = request.POST.get('author')
-            isbn = request.POST.get('isbn')
-            price = request.POST.get('price')
-            description = request.POST.get('description')
-            image = request.FILES.get('image')
-            book = Books(title=title, author=author, isbn=isbn, price=price, description=description, image=image, admin=admin)
-            book.save()
-            return redirect('../manager/Books')
-        else:
-            return render(request,'manager/addbooks.html')
+            book = Books.objects.get(id=32)
+            context = {'item':book}
+            # book = Books.objects.filter(id=pk).first()
+            # book.delete()
+            return render(request,'manager/books.html',context)
+        return render(request,'manager/books.html',context)
