@@ -1,82 +1,14 @@
+{% extends 'manager/main_template.html' %}
 {% load static %}
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />  
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link rel="stylesheet" href="{% static 'css/Mmembers.css' %}">
-
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <li style="list-style: none;">Welcome Mr.{{admin.name}}</li>
-        <li class="nav-item dropdown" dropdown style="list-style: none;">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Profile
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a href="" class="dropdown-item">Edit profile</a>
-                <a href="adminlogout" class="dropdown-item">Logout</a>
-            </div>
-        </li>
-    </div>
-</nav>
-<!-- Navbar close-->
-
-<div class="container">
-    <h5 class="card-title mb-0">Recent Transactions</h5>
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-            <div class="table-responsive">
-              <form method="post">
-                <table class="table no-wrap user-table mb-0">
-                  <thead>
-                    <tr>
-                      <th scope="col" class="border-0 text-uppercase font-medium pl-4">#</th>
-                      <th scope="col" class="border-0 text-uppercase font-medium">Customer Name</th>
-                      <th scope="col" class="border-0 text-uppercase font-medium">Book Name</th>
-                      <th scope="col" class="border-0 text-uppercase font-medium">Auther</th>
-                      <th scope="col" class="border-0 text-uppercase font-medium">Date</th>
-                      <th scope="col" class="border-0 text-uppercase font-medium">Action</th>
-                      <!-- <th scope="col" class="border-0 text-uppercase font-medium">Manage</th> -->
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td class="pl-4">1</td>
-                      <td>
-
-                          <h5 class="font-medium mb-0"></h5>
-                          <span class="text-muted"></span>
-                      </td>
-                      <td>
-                          <span class="text-muted"></span><br>
-                      </td>
-                      <td>
-                          <span class="text-muted"></span><br>
-                      </td>
-                      <td>
-                        
-                      </td>
-                      
-                      <td>
-                        <!-- <select class="form-control category-select" id="exampleFormControlSelect1">
-                          <option>None</option>
-                          <option>Enable</option>
-                          <option>Disable</option>
-                          <option>Delete</option>
-                        </select>-->
-                        
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </form>
-            </div>
-        </div>
-    </div>
+{% block content %}
+<div class="container col py-5" >
+    <a href="" class="btn btn-danger float-right mb-3" data-toggle="modal" data-target="#modalLoginForm">Add New Book+</a>
+  <h5 class="card-title text-uppercase mb-0">Books</h5>
+  <!-- search bar -->
+  <div class="input-group">
+    <input type="search" class="form-control rounded" placeholder="Search By: Book Name/Author" aria-label="Search" aria-describedby="search-addon" />
+    <button type="button" class="btn btn-outline-primary">Search</button>
+  </div>
 </div>
-</div>
+<h1>sdfjksdfhkjfadjkhfajdhfjkhkjhfjkdhfkshdkfhsdkhfsjkdhfjshdn,nc,vncnvx,n,xcn,vnxcv,nxvn,xcmvxcv,n,</h1>
+{% endblock %}

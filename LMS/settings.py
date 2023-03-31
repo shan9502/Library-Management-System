@@ -142,3 +142,6 @@ STATICFILES_DIRS = (
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # PHONENUMBER_DEFAULT_REGION = 'US'
+# Media Root and url
+MEDIA_ROOT  = os.path.join(BASE_DIR, '')
+MEDIA_URL = '/media/'
