@@ -1,15 +1,11 @@
-{% load static %}
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />  
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link rel="stylesheet" href="{% static 'css/Mmembers.css' %}">
+{% extends 'manager/main_template.html' %}
+{% block content %}
 
-<div class="container">
+<div class="container col py-5">
+  <h5 class="card-title text-uppercase mb-0">Manage Members</h5>
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-body">
-                <h5 class="card-title text-uppercase mb-0">Manage Members</h5>
-            </div>
             <div class="table-responsive">
               <form method="post">
                 <table class="table no-wrap user-table mb-0">
@@ -27,39 +23,32 @@
                   <tbody>
                     {% for member in members %}
                     <tr>
-                      <td class="pl-4">1</td>
+                      <td class="pl-4">{{ forloop.counter }}</td>
                       <td>
 
                           <h5 class="font-medium mb-0">{{member.name}}</h5>
-                          <span class="text-muted">{{member.phone}}</span>
+                          <span class="text-muted fa fa-mobile"> {{member.mobile}}</span>
                       </td>
                       <td>
-                          <span class="text-muted">{{member.membership_id}}</span><br>
+                          <span class="text-muted">{{member.membership_no}}</span><br>
                       </td>
                       <td>
                           <span class="text-muted">{{member.created_at}}</span><br>
                       </td>
                       <td>
                         {% if member.status == 0 %}
-                            <span class="text-muted">Inactive</span><br>
+                            <span style="color: crimson;">Inactive</span><br>
                         {% elif member.status == 1 %}
-                            <span class="text-muted">Active</span><br>
+                            <span style="color: forestgreen;">Active</span><br>
                         {% endif %}
-                      </td>
-                      
+                      </td>                     
                       <td>
-                        <!-- <select class="form-control category-select" id="exampleFormControlSelect1">
-                          <option>None</option>
-                          <option>Enable</option>
-                          <option>Disable</option>
-                          <option>Delete</option>
-                        </select>-->
+                          <a href="" value="View">View</a> &nbsp;
                         {% if member.status == 0 %}
-                          <input type="submit" class="btn btn-link" id="enable" value="Enable" style="color: forestgreen;">
+                          <a href="{% url 'enableMember' pk=member.id %}" id="enable">Enable</a>
                         {% elif member.status == 1 %}
-                          <input type="submit" class="btn btn-link" id="disable" value="Disable" style="color: crimson;">
+                          <a href="{% url 'disableMember' pk=member.id %}" id="disable">Disable</a>
                         {% endif %}
-                          <a href="" class="btn btn-link" value="View">View</a>
                       </td>
                     </tr>
                     {% endfor %}
@@ -71,3 +60,4 @@
     </div>
 </div>
 </div>
+{% endblock %}

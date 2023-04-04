@@ -21,24 +21,24 @@
               <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                   <h4>
                     <li class="nav-item">
-                      <a href="/manager/dashboard" class="nav-link align-middle px-0">
+                      <a href="/manager/dashboard/" class="nav-link align-middle px-0">
                           <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">Dashboard</span>
                       </a>
                   </li>
                   <li>
                       <a href="#" class="nav-link px-0 align-middle">
-                          <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Transactoins</span></a>
+                          <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Transactions</span></a>
                   </li>
                   <li>
-                      <a href="#" class="nav-link px-0 align-middle">
+                      <a href="/manager/manageMembers/" class="nav-link px-0 align-middle">
                           <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Members</span> </a>
                   </li>
                   <li>
-                    <a href="/manager/books" class="nav-link px-0 align-middle">
+                    <a href="/manager/books/" class="nav-link px-0 align-middle">
                         <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Books</span> </a>
                   </li>
                   <li>
-                    <a href="#" class="nav-link px-0 align-middle">
+                    <a href="/manager/settings/" class="nav-link px-0 align-middle">
                         <i class="fs-4 bi-people"></i> <span class="ms-1 d-none d-sm-inline">Settings</span> </a>
                   </li>
                 </h4>
@@ -46,14 +46,13 @@
               <hr>
           </div>
       </div>
-    </div>
-</div>
+    
 <!-- Sidebar -->
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container-fluid">
-        <li style="list-style: none;">Library Name</li>
+        <li style="list-style: none;">{{settings.library_name}}</li>
         <li class="nav-item dropdown" dropdown style="list-style: none;">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               Welcome Mr.{{admin.name}}
@@ -66,6 +65,10 @@
     </div>
   </nav>
 <!-- Navbar close-->
+{% block content %}
 
 <!-- content here -->
-  
+{% endblock %}
+
+    </div>
+</div>

@@ -101,7 +101,7 @@ def MemberLoginView(request):
                 if check_password(password, member.password):
                     #return redirect('home')
                     if member.status == 0:
-                        context = {'form': form, 'type':'Member', 'msg':'please wait until your accout is activated by the library manager.','pagelink':'MemberReg'}
+                        context = {'form': form, 'type':'Member', 'msg':'please wait until your accout is activated by library manager.','pagelink':'MemberReg'}
                         return render(None,'login.html', context)
                     else:
                         request.session['Memberlogin']= True
