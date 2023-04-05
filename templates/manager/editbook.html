@@ -1,0 +1,35 @@
+{% block modal-edit %}
+{% load static %}
+<!-- Edit Book PopUp -->
+<div class="modal fade" id="editBookForm" tabindex="-1" role="dialog" aria-labelledby="editBookLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+            <h4 class="modal-title w-100 font-weight-bold">Edit Book</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form action="/manager/editBook/" class="form-horizontal" enctype="multipart/form-data" id="editbook" method="post">
+          <div class="modal-body mx-3">
+            <div class="md-form mb-4">
+              <input type="hidden" name="pk" id="ebookid" value="">
+              <label>Title</label>
+              <input name="title" id="title" value=""><br>
+              <label>Auhtor</label>
+              <input name="author" id="author" value=""><br>
+              <label>Language</label>
+              <input name="lang" id="lang" value=""><br>
+              <img id="img" src="" width="100" height="120" alt="My image"/>
+              <input type="file" name="image" accept="image/*">
+            </div>
+          </div>
+          <div class="modal-footer d-flex justify-content-center">
+            <button class="btn btn-primary" type="submit">Update Book</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endblock modal-edit%}
+  <!-- Edit Book PopUp Close-->

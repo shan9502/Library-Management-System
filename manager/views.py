@@ -4,23 +4,26 @@ from users.models import Admin
 from django.views.decorators.csrf import csrf_exempt
 from .forms import AddBookForm, SettingsForm
 from django.shortcuts import get_object_or_404
-
+from datetime import datetime
 
 # Admin Manage Members View 
 @csrf_exempt
 def ManageMemberView(request):
     if request.session['Adminlogin'] == True:
-        #getting members from database model
-        members = Members.objects.all()
         settings = Settings.objects.filter().latest('id')
         id = request.session['AdminId']
         #print("Admin ID:",id)
         admin = Admin.objects.filter(id=id).first()
-        context = {'members':members, 'settings':settings, 'admin':admin}
-        
-        #rendering members.html page
+        if request.method == 'POST':
+            if request.POST.get('search'):
+                search = request.POST.get('search')
+                members = Members.objects.filter(name = search)
+                context = {'members':members, 'settings':settings, 'admin':admin}
+            else:              
+                #getting members from database model
+                members = Members.objects.all()
+                context = {'members':members, 'settings':settings, 'admin':admin}
         return render(request,'manager/members.html', context)
-        #return render(request, 'manager/members.html')
     else:
         return redirect('/user/AdminLogin')
 
@@ -81,31 +84,26 @@ def deleteBookView(request):
 
 # edit books
 @csrf_exempt        
-def editBookView(request, pk):
-    print("primary Key:",pk)
+def editBookView(request,):
     if request.session['Adminlogin'] == True:
-        book = Books.objects.get(id = pk)
-        print("primary Key:",pk)
-        form = AddBookForm(request.POST, request.FILES, instance=book)
-        context = {'form':form}
         if request.method == 'POST':
             pk = request.POST.get('pk')
-            context = {''}
             #print("Book Id:",pk)
+            title =request.POST.get('title')
+            author = request.POST.get('author')
+            lang = request.POST.get('lang')
+            image = request.FILES.get('image')
+
             book = Books.objects.get(id=pk)
-            form = AddBookForm(request.POST, request.FILES, instance=book)
-            if form.is_valid():
-                form.save()
-                #return redirect('../manager/Books')
-                #return render(request,'manager/books.html',context)
+            if book:
+                book.title = title
+                book.author = author
+                book.language = lang
+                book.image = image
+                book.save()
                 return redirect('/manager/books')
-            else:
-                print(form.errors)
-                return redirect('manager/books')
         else:
-            return render(request,'manager/books.html/#editxBookForm',context)
-    else:
-        return redirect('/user/AdminLogin')
+            return redirect('/manager/books')
 
 
 # BooK Search

@@ -1,0 +1,18 @@
+{% block modal-deletebook %}
+<!-- Delete Book PopUp -->
+<div class="modal fade" id="deleteBookForm" tabindex="-1" role="dialog" aria-labelledby="deleteBookLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 style="display: inline">Are you sure you want to delete " <strong class="booktitle"></strong> " ?</h6>
+        </div>
+        <form class="ml-auto pr-4 pt-4" action="/manager/deleteBook/" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="pk" id="bookid" value="">
+          <input class="btn btn-danger" type="submit" value="Confirm">
+          <a href="" class="btn btn-success">Cancel</a>&nbsp;&nbsp;
+        </form>
+      </div>
+    </div>
+  </div>
+  {% endblock modal-deletebook %}

@@ -1,6 +1,5 @@
-{% block content %}
+{% block modal-addbook %}
 <!-- content here -->
-{% endblock %}
 <!-- Add Books Popup-->
 <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
@@ -15,7 +14,6 @@
       <form class="form-horizontal" enctype="multipart/form-data" id="addbook" method="post">
         <div class="modal-body mx-3">
           <div class="md-form mb-4">
-            <!-- <i class="fas fa-lock prefix grey-text"></i> -->
             <label data-error="wrong" data-success="right" for="defaultForm-pass">Title</label>
             {{form.title}}<br>
             <label data-error="wrong" data-success="right" for="defaultForm-pass">Author</label>
@@ -34,3 +32,4 @@
   </div>
 </div>
 <!-- Add Books Popup Close-->
+{% endblock modal-addbook%}

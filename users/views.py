@@ -106,7 +106,8 @@ def MemberLoginView(request):
                     else:
                         request.session['Memberlogin']= True
                         request.session['MemberId'] = member.id
-                        return HttpResponse('<h1>Member Login Success</h1>')
+                        #return HttpResponse('<h1>Member Login Success</h1>')
+                        return redirect('/member/home')
                 else:
                     #return HttpResponse('<h1>Password Not Matching</h1>')
                     context = {'form': form, 'type':'Member', 'msg':'incorrect password','pagelink':'MemberReg'}

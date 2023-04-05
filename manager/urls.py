@@ -15,6 +15,6 @@ urlpatterns = [
     path(r'^enableMember/(?P<pk>\d+)/$', EnableMember, name="enableMember"),
     path(r'^disableMember/(?P<pk>\d+)/$', DisableMember, name="disableMember"),
     path('settings/', SettingsAdminView, name="settings"),
-    path(r'^editBook/(?P<pk>\d+)/$', editBookView, name="editBook"),
+    path('editBook/', editBookView, name="editBook"),
 
 ]

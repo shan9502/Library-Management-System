@@ -2,9 +2,15 @@
 {% block content %}
 
 <div class="container col py-5">
-  <h5 class="card-title text-uppercase mb-0">Manage Members</h5>
+  <h5 class="card-title text-uppercase mb-0">Manage Members</h5><br>
 <div class="row">
     <div class="col-md-12">
+      <form action="/manager/manageMembers/" method="post">
+        <div class="input-group">
+          <input type="search" class="form-control rounded" name="search" placeholder="Search By: Member Name" aria-label="Search" aria-describedby="search-addon" />
+          <button type="submit" class="btn btn-outline-primary">Search</button>
+        </div>
+      </form>
         <div class="card">
             <div class="table-responsive">
               <form method="post">
@@ -61,3 +67,20 @@
 </div>
 </div>
 {% endblock %}
+
+<!-- Add Books Popup-->
+<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Member View</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<!-- Add Books Popup Close-->

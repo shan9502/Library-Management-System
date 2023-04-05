@@ -23,10 +23,10 @@ class Books(models.Model):
     title = models.CharField(max_length=250)
     author = models.CharField(max_length=100)
     language = models.CharField(max_length=100)
-    image = models.ImageField(upload_to="media/books/")
+    image = models.ImageField(upload_to="static/media/books/")
     current_status = models.CharField(max_length=6 , default='FREE')
-    created_at = models.DateTimeField(auto_created=True, auto_now=True,blank=True)
-    updated_at = models.DateTimeField(auto_created=False, auto_now=True ,blank=True)
+    created_at = models.DateTimeField(auto_created=True,auto_now=True,blank=True)
+    updated_at = models.DateTimeField(auto_created=True, auto_now=True ,blank=True)
 
     class Meta:
         managed = False
@@ -48,8 +48,8 @@ class Settings(models.Model):
 
 class BooksReservations(models.Model):
     id = models.PositiveIntegerField(primary_key=True,auto_created=True, blank=True)
-    book_id = models.ForeignKey(Books,on_delete=models.CASCADE)
-    member_id = models.ForeignKey(Members, on_delete=models.CASCADE)
+    book = models.ForeignKey(Books, on_delete=models.DO_NOTHING)
+    member = models.ForeignKey(Members, on_delete=models.DO_NOTHING)
     booking_date = models.DateTimeField()
     status = models.CharField(max_length=9)
     created_at = models.DateTimeField(auto_created=True, auto_now=True)
