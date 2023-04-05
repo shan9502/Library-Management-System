@@ -1,14 +1,84 @@
 {% extends 'manager/main_template.html' %}
-{% load static %}
 {% block content %}
-<div class="container col py-5" >
-    <a href="" class="btn btn-danger float-right mb-3" data-toggle="modal" data-target="#modalLoginForm">Add New Book+</a>
-  <h5 class="card-title text-uppercase mb-0">Books</h5>
-  <!-- search bar -->
-  <div class="input-group">
-    <input type="search" class="form-control rounded" placeholder="Search By: Book Name/Author" aria-label="Search" aria-describedby="search-addon" />
-    <button type="button" class="btn btn-outline-primary">Search</button>
+
+<div class="container container-xl py-5">
+<!-- Div for cards -->
+<div class="row">
+  <div class="col">
+          <div class="card bg-c-blue order-card rounded">
+              <div class="card-block py-2 p-2">
+                  <h2 class="text-center"></i><span>{{books.count}}</span></h2>
+                  <h6 class="m-b-0 text-center">Total Books</h6>
+              </div>
+          </div>
   </div>
+  <div class="col">
+        <div class="card bg-c-blue order-card rounded">
+            <div class="card-block py-2 p-2">
+                <h2 class="text-center"></i><span>
+                  {{issued.count}}
+                </span></h2>
+                <h6 class="m-b-0 text-center">Issued</h6>
+            </div>
+        </div>
 </div>
-<h1>sdfjksdfhkjfadjkhfajdhfjkhkjhfjkdhfkshdkfhsdkhfsjkdhfjshdn,nc,vncnvx,n,xcn,vnxcv,nxvn,xcmvxcv,n,</h1>
+<div class="col">
+      <div class="card bg-c-blue order-card rounded">
+          <div class="card-block py-2 p-2">
+              <h2 class="text-center"></i><span>{{members.count}}</span></h2>
+              <h6 class="m-b-0 text-center">Members</h6>
+          </div>
+      </div>
+</div>
+<div class="col">
+      <div class="card bg-c-blue order-card rounded">
+          <div class="card-block py-2 p-2">
+              <h2 class="text-center"><span>{{res_pendings.count}}</span></h2>
+              <h6 class="m-b-0 text-center">Pending Reservations</h6>
+          </div>
+      </div>
+</div>
+<div class="col">
+      <div class="card bg-c-blue order-card rounded">
+          <div class="card-block py-2 p-2">
+              <h2 class="text-center"></i><span>486</span></h2>
+              <h6 class="m-b-0 text-center">Books on Due Today</h6>
+          </div>
+      </div>
+</div>
+</div>
+<!-- Close Cards -->
+
+<div class="col py-5">
+  <h5 class="card-title text-uppercase mb-0">Recent Transactions</h5>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="table-responsive">
+              <form method="post">
+                <table class="table no-wrap user-table mb-0">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="border-0 text-uppercase font-medium pl-4">#</th>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Customer Name</th>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Book Name</th>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Auther</th>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Date</th>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Action</th>
+                      <!-- <th scope="col" class="border-0 text-uppercase font-medium">Manage</th> -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                  </tbody>
+                </table>
+              </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="container">
+  
+</div>
 {% endblock %}

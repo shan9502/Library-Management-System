@@ -1,0 +1,19 @@
+{% extends 'manager/main_template.html' %}
+{% block content %}
+
+<div class="container-fluid py-5 ">
+    <h4>Update the Library Settings</h4><br>
+    <form method="post" action="/manager/settings/">
+        {{form.as_p}}
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+    <!-- Alert content -->
+    {% if msg %}
+    <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+        {{msg}}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {% endif %}
+</div>
+{% endblock %}

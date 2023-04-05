@@ -39,16 +39,16 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
       </form>
     </div>
   </div>
-  <!-- Pills content -->
-  {% if msg %}
-  <div class="alert alert-warning alert-dismissible fade show" role="alert">
-      {{msg}}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  {% endif %}
 </div>
 </div>
+<!-- Alert content -->
+{% if msg %}
+<div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+    {{msg}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+{% endif %}
 </div>
 </div>
 </div>

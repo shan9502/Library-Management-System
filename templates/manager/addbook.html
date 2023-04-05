@@ -1,0 +1,35 @@
+{% block modal-addbook %}
+<!-- content here -->
+<!-- Add Books Popup-->
+<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Add New Book</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="form-horizontal" enctype="multipart/form-data" id="addbook" method="post">
+        <div class="modal-body mx-3">
+          <div class="md-form mb-4">
+            <label data-error="wrong" data-success="right" for="defaultForm-pass">Title</label>
+            {{form.title}}<br>
+            <label data-error="wrong" data-success="right" for="defaultForm-pass">Author</label>
+            {{form.author}}<br>            
+            <label data-error="wrong" data-success="right" for="defaultForm-pass">Language</label>
+            {{form.language}}<br>            
+            <label data-error="wrong" data-success="right" for="defaultForm-pass">Image</label>
+            {{form.image}}<br>
+          </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+          <button class="btn btn-primary" type="submit">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Add Books Popup Close-->
+{% endblock modal-addbook%}
