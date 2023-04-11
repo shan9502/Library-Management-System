@@ -16,7 +16,6 @@ deployment_dev:
     - python manage.py makemigrations --merge --noinput
     - python manage.py migrate
     - deactivate
-    - sudo chown -R web:web media/
     - sudo supervisorctl reload
   only:
     - development
