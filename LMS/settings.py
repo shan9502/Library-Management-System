@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -23,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ur@eld147_5*ax#u+6&d7yu&lt*_+b5au65i8dohb#zl(ktbws'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -85,11 +87,11 @@ DATABASES = {
 
     'default': {  
         'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'lms',  
-        'USER': 'root',  
-        'PASSWORD': 'zoondia',  
-        'HOST': '127.0.0.1',  
-        'PORT': '3306',  
+        'NAME': config('DB_NAME'),  
+        'USER': config('DB_USER'),  
+        'PASSWORD': config('DB_PASSWORD'),  
+        'HOST': config('DB_HOST'),  
+        'PORT': config('DB_PORT'),  
         'OPTIONS': {  
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
         }
@@ -148,10 +150,10 @@ MEDIA_URL = '/media/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 #EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.mailgun.org'
-EMAIL_PORT = 587
-EMAIL_HOST_USER ='postmaster@sandbox72d4891d823f44848bd4f4007de2ae38.mailgun.org' # Note I'm using my actual gmail address here in real life
-EMAIL_HOST_PASSWORD ='4d6ea998a79e636a9012c19eb89baf75-2cc48b29-e8219ef1' # Note I'm using my actual gmail password here in real life
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_HOST_USER =config('EMAIL_HOST_USER') # Note I'm using my actual gmail address here in real life
+EMAIL_HOST_PASSWORD =config('EMAIL_HOST_PASSWORD') # Note I'm using my actual gmail password here in real life
 
 # DEFAULT_FROM_EMAIL = 'myemail@gmail.com' # Note I'm using my actual gmail address here in real life
 # SERVER_EMAIL = 'myemail@gmail.com'
