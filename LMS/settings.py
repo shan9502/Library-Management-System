@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-ur@eld147_5*ax#u+6&d7yu&lt*_+b5au65i8dohb#zl(ktbws
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['zootest-proj1.zoondia.org']
 
 
 # Application definition
