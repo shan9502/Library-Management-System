@@ -145,3 +145,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Media Root and url
 MEDIA_ROOT  = os.path.join(BASE_DIR, '')
 MEDIA_URL = '/media/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_PORT = 587
+EMAIL_HOST_USER ='postmaster@sandbox72d4891d823f44848bd4f4007de2ae38.mailgun.org' # Note I'm using my actual gmail address here in real life
+EMAIL_HOST_PASSWORD ='4d6ea998a79e636a9012c19eb89baf75-2cc48b29-e8219ef1' # Note I'm using my actual gmail password here in real life
+
+# DEFAULT_FROM_EMAIL = 'myemail@gmail.com' # Note I'm using my actual gmail address here in real life
+# SERVER_EMAIL = 'myemail@gmail.com'

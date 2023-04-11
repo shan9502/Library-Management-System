@@ -1,8 +1,8 @@
 {% extends 'manager/main_template.html' %}
 {% block content %}
 
-<div class="container-fluid py-5 ">
-    <h4>Update the Library Settings</h4><br>
+<div class="container-fluid py-5 p-5">
+    <h4 class="">Update the Library Settings</h4><br>
     <form method="post" action="/manager/settings/">
         {{form.as_p}}
         <button type="submit" class="btn btn-primary">Update</button>

@@ -1,0 +1,97 @@
+{% extends 'manager/main_template.html' %}
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+<div class="col py-5">
+    <form action="/manager/transactions/" method="post">
+        <div class="input-group">
+          <input type="search" class="form-control rounded" name="search" placeholder="Search By: Member Name/ Book/ Author" aria-label="Search" aria-describedby="search-addon" />
+          <select class="rounded bg-white" name="status" id="status">
+            <option class="text-muted">/Status</option>  
+            <option value="Pending">Pending</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Returned">Returned</option>
+          </select>
+          <button type="submit" class="btn btn-outline-primary">Search</button>
+        </div>
+      </form>
+    <h5 class="card-title text-uppercase mb-0">Transactions</h5>
+      <div class="col-md-12 pt-3">
+          <div class="card">
+              <div class="table-responsive" style="overflow:scroll; height: 600px;">
+                <form method="post">
+                  <table class="table no-wrap user-table mb-0">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="border-0 text-uppercase font-medium pl-4">#</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Customer Name</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Book Name</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Author</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Date</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Booking Status</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Action</th>
+                        <!-- <th scope="col" class="border-0 text-uppercase font-medium">Manage</th> -->
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for data in transactions %}
+                      <tr>
+                        <td>{{forloop.counter}} </td>
+                        <td>{{data.member.name}}</td>
+                        <td>{{data.book.title}}</td>
+                        <td>{{data.book.author}}</td>
+                        <td>{{data.booking_date}}</td>
+                        {% if data.status == 'Pending' %}
+                          <td class="text-center" style="color:crimson;">{{data.status}}</td>
+                          <td><button class="btn btn-primary btn-sm status"  data-id="{{data.id}}" data-value="1" >Confirm</button></td>
+                        {% elif data.status == 'Confirmed' %}
+                          <td class="text-center" style="color:limegreen;">{{data.status}}</td>
+                          <td><button class="btn btn-primary btn-sm status" data-id="{{data.id}}" data-value="0" >Return</button></td>
+                        {%else%}
+                        <td class="text-center" style="color:blue;">{{data.status}}</td>
+                        <td><button class="btn btn-primary btn-sm status" data-id="{{data.id}}" data-value="2" >Pending</button></td>
+                        {% endif %}
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </form>
+              </div>
+          </div>
+      </div>
+  </div>
+  </div>
+  <script>
+    $('.status').click(function(e){
+      console.log('calling status');
+      var id = $(this).data('id');
+      var value = $(this).data('value');
+      
+      console.log(value);
+      postvalue(id, value);
+  
+      function postvalue(id, value){
+      // console.log(id);
+          $.ajax({
+              type: "POST",
+              url: "{% url 'manager:transactions' %}",
+              data: {
+                'id' : JSON.stringify(id),
+                'value' : JSON.stringify(value),
+              },
+              success: function (response) {
+                  console.log('success');
+                },
+                error:function(response){
+                  if(response.status == 403){
+                      console.log("error");
+                    }else{
+                        console.log(response.status);
+                    }
+                }
+              });
+          return 0;
+      }
+    });
+  </script>
+{% endblock %}

@@ -1,18 +1,24 @@
 {% extends 'manager/main_template.html' %}
 {% block content %}
 
-<div class="container col py-5">
-  <h5 class="card-title text-uppercase mb-0">Manage Members</h5><br>
+<div class="container-fluid py-5 p-5">
+  <h5 class="card-title text-uppercase mb-0 pt-2">Manage Members</h5><br>
 <div class="row">
     <div class="col-md-12">
       <form action="/manager/manageMembers/" method="post">
         <div class="input-group">
           <input type="search" class="form-control rounded" name="search" placeholder="Search By: Member Name" aria-label="Search" aria-describedby="search-addon" />
+          <!-- <label for="status">Search By Status:</label> -->
+          <select class="rounded bg-white" name="status" id="status">
+            <option class="text-muted">/Status</option>  
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
+          </select>
           <button type="submit" class="btn btn-outline-primary">Search</button>
         </div>
       </form>
         <div class="card">
-            <div class="table-responsive">
+            <div class="table-responsive" style="overflow:scroll; height: 650px;">
               <form method="post">
                 <table class="table no-wrap user-table mb-0">
                   <thead>
@@ -51,9 +57,9 @@
                       <td>
                           <a href="" value="View">View</a> &nbsp;
                         {% if member.status == 0 %}
-                          <a href="{% url 'enableMember' pk=member.id %}" id="enable">Enable</a>
+                          <a href="{% url 'manager:enableMember' pk=member.id %}" id="enable">Enable</a>
                         {% elif member.status == 1 %}
-                          <a href="{% url 'disableMember' pk=member.id %}" id="disable">Disable</a>
+                          <a href="{% url 'manager:disableMember' pk=member.id %}" id="disable">Disable</a>
                         {% endif %}
                       </td>
                     </tr>
@@ -67,7 +73,7 @@
 </div>
 </div>
 {% endblock %}
-
+</div>
 <!-- Add Books Popup-->
 <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">

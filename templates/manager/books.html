@@ -3,7 +3,7 @@
 <!-- <button class="btn btn-success btn-lg float-right" type="submit">Submit</button> align button right -->
 <br>
   <!--Books Table-->
-  <div class="container col py-5" >
+  <div class="container-fluid py-5 p-5" >
       <!-- <div class="card-body  container-fluid mb-2"> -->
         <!-- Add Book Button -->
         <a href="/manager/books/" class="btn btn-danger float-right mb-3" data-toggle="modal" data-target="#modalLoginForm">Add New Book +</a>
@@ -19,7 +19,7 @@
   <div class="row">
       <div class="col-md-12">
           <div class="card">
-              <div class="table-responsive">
+              <div class="table-responsive" style="overflow:scroll; height: 600px;">
                   <table class="table no-wrap user-table mb-0">
                     <thead>
                       <tr>
@@ -59,7 +59,9 @@
                               {% endif %}
                             </td>
                             <td>
-                              <a href="">View</a>&nbsp;
+                              <a href="" class="building-link view" data-toggle="modal" data-target="#viewBookForm" 
+                              data-title="{{book.title}}" data-bookid="{{book.id}}" data-author="{{book.author}}" 
+                              data-lang="{{book.language}}" data-image="{{book.image}}" data-status="{{book.current_status}}">View</a>&nbsp;
                               <a href="" class="building-link edit" data-toggle="modal" data-target="#editBookForm" 
                               data-title="{{book.title}}" data-bookid="{{book.id}}" data-author="{{book.author}}" 
                               data-lang="{{book.language}}" data-image="{{book.image}}">Edit</a>&nbsp;
@@ -82,6 +84,9 @@
 {% include 'manager/editbook.html' %}
 
 <!-- Add Books Popup-->
+{% include 'manager/bookview.html' %}
+
+<!-- Add Books Popup-->
 {% include 'manager/addbook.html' %}
 
 <!-- Delete Book conformation popup -->
@@ -91,11 +96,11 @@
   // $('.delete').on('shown.bs.modal', function () {
 //jq for deletebook
   $('body').on('click','.delete',function(e){
-  console.log(e.target.dataset.title);
+  //console.log(e.target.dataset.title);
   
   var id = e.target.dataset.bookid;
   var title = e.target.dataset.title;
-  console.log(title);
+  //console.log(title);
   $('.booktitle').html(title);
   $('#deleteBookForm').modal('show'); //load modal
   $('#bookid').val(id);
@@ -120,7 +125,31 @@
   $('#author').val(author);
   $('#lang').val(lang);
   url = '/' + image;
+  console.log(url);
   $('#img').attr('src', url);
+  });
+
+  //jq to edit book
+  $('body').on('click','.view',function(e){
+  //console.log(e.target.dataset.title);
+
+  var id = e.target.dataset.bookid;
+  var title = e.target.dataset.title;
+  var author = e.target.dataset.author;
+  var lang = e.target.dataset.lang;
+  var image = e.target.dataset.image;
+  var status = e.target.dataset.status;
+  //console.log(image);
+ 
+  $('#viewBookForm').modal('show'); //load modal
+  $('.ebookid').html(id);
+  $('.title').html(title);
+  $('.author').html(author);
+  $('.lang').html(lang);
+  $('.status').html(status);
+  url = '/' + image;
+  console.log(url);
+  $('#imgview').attr('src', url);
   });
 </script>
 

@@ -1,0 +1,69 @@
+{% extends 'member/base.html' %}
+{% block content %}
+
+<div class="col py-5">
+    <h5 class="card-title text-uppercase mb-0 pt-5 text-center">Reservations</h5>
+      <div class="col-md-12 pt-3">
+          <div class="card">
+              <div class="table-responsive">
+                <form method="post">
+                  <table class="table no-wrap user-table mb-0">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="border-0 text-uppercase font-medium pl-4">#</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium"></th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Book Name</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Author</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Reservation Date</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Requested Date</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for data in reservations %}
+                      <tr>
+                        <td>{{forloop.counter}} </td>
+                        <td style="width: 130px;"><img src="/{{data.book.image}}" style="height: 100%; width: 95%;"></td>
+                        <td>{{data.book.title}}</td>
+                        <td>{{data.book.author}}</td>
+                        <td>{{data.booking_date}}</td>
+                        <td>{{data.created_at}}</td>
+                        <td><a class="btn btn-danger btn-sm cancel" data-toggle="modal" data-target="#cancelBook" data-id="{{data.id}}" data-title="{{data.book.title}}">Cancel</a></td>
+                      {% endfor %}
+                      </tr> 
+                    </tbody>
+                  </table>
+                </form>
+              </div>
+          </div>
+      </div>
+
+<!-- calcel Book reservation PopUp -->
+<div class="modal fade" id="cancelBook" tabindex="-1" role="dialog" aria-labelledby="deleteBookLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 style="display: inline">Are you sure you want to <strong>Cancel The Reservation</strong></strong> for <br>" <strong class="booktitle"></strong> " ?</h6>
+      </div>
+      <form class="ml-auto pr-4 pt-4" action="/member/reservations/" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="pk" id="reserveid" value="">
+        <input class="btn btn-danger" type="submit" value="Confirm">
+        <a href="" class="btn btn-success">Back</a>&nbsp;&nbsp;
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('.cancel').click(function(){
+    var id = $(this).data('id');
+    var title = $(this).data('title');
+
+    $('.booktitle').html(title);
+    $('#deleteBookForm').modal('show'); //load modal
+    $('#reserveid').val(id);
+
+  });
+</script>
+{% endblock %}

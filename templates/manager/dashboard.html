@@ -1,9 +1,11 @@
 {% extends 'manager/main_template.html' %}
 {% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
-<div class="container container-xl py-5">
+<div class="container-fluid py-5 p-5">
 <!-- Div for cards -->
-<div class="row">
+<div class="row pt-4">
   <div class="col">
           <div class="card bg-c-blue order-card rounded">
               <div class="card-block py-2 p-2">
@@ -41,7 +43,7 @@
 <div class="col">
       <div class="card bg-c-blue order-card rounded">
           <div class="card-block py-2 p-2">
-              <h2 class="text-center"></i><span>486</span></h2>
+              <h2 class="text-center"></i><span>{{dues}}</span></h2>
               <h6 class="m-b-0 text-center">Books on Due Today</h6>
           </div>
       </div>
@@ -51,7 +53,7 @@
 
 <div class="col py-5">
   <h5 class="card-title text-uppercase mb-0">Recent Transactions</h5>
-    <div class="col-md-12">
+    <div class="col-md-12 pt-3">
         <div class="card">
             <div class="table-responsive">
               <form method="post">
@@ -61,14 +63,33 @@
                       <th scope="col" class="border-0 text-uppercase font-medium pl-4">#</th>
                       <th scope="col" class="border-0 text-uppercase font-medium">Customer Name</th>
                       <th scope="col" class="border-0 text-uppercase font-medium">Book Name</th>
-                      <th scope="col" class="border-0 text-uppercase font-medium">Auther</th>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Author</th>
                       <th scope="col" class="border-0 text-uppercase font-medium">Date</th>
+                      <th scope="col" class="border-0 text-uppercase font-medium">Booking Status</th>
                       <th scope="col" class="border-0 text-uppercase font-medium">Action</th>
                       <!-- <th scope="col" class="border-0 text-uppercase font-medium">Manage</th> -->
                     </tr>
                   </thead>
                   <tbody>
-                    
+                    {% for data in transactions %}
+                    <tr>
+                      <td>{{forloop.counter}} </td>
+                      <td>{{data.member.name}}</td>
+                      <td>{{data.book.title}}</td>
+                      <td>{{data.book.author}}</td>
+                      <td>{{data.booking_date}}</td>
+                      {% if data.status == 'Pending' %}
+                        <td class="text-center" style="color:crimson;">{{data.status}}</td>
+                        <td><button class="btn btn-primary btn-sm status"  data-id="{{data.id}}" data-value="1" >Confirm</button></td>
+                      {% elif data.status == 'Confirmed' %}
+                        <td class="text-center" style="color:limegreen;">{{data.status}}</td>
+                        <td><button class="btn btn-primary btn-sm status" data-id="{{data.id}}" data-value="0" >Return</button></td>
+                      {%else%}
+                      <td class="text-center" style="color:blue;">{{data.status}}</td>
+                      <td><button class="btn btn-primary btn-sm status" data-id="{{data.id}}" data-value="2" >Pending</button></td>
+                      {% endif %}
+                    </tr>
+                    {% endfor %}
                   </tbody>
                 </table>
               </form>
@@ -77,8 +98,47 @@
     </div>
 </div>
 </div>
-
-<div class="container">
-  
+<!-- Sweet Message -->
+{% if message %}
+<script>
+    swal("This Book is Not FREE!");
+</script>
+{% endif %}
 </div>
+</div>
+
+
+<script>
+  $('.status').click(function(e){
+    console.log('calling status');
+    var id = $(this).data('id');
+    var value = $(this).data('value');
+    
+    console.log(value);
+    postvalue(id, value);
+
+    function postvalue(id, value){
+    // console.log(id);
+        $.ajax({
+            type: "POST",
+            url: "{% url 'manager:dashboard' %}",
+            data: {
+              'id' : JSON.stringify(id),
+              'value' : JSON.stringify(value),
+            },
+            success: function (response) {
+                console.log('success');
+              },
+              error:function(response){
+                if(response.status == 403){
+                    console.log("error");
+                  }else{
+                      console.log(response.status);
+                  }
+              }
+            });
+        return 0;
+    }
+  });
+</script>
 {% endblock %}
