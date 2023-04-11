@@ -3,6 +3,7 @@ from .models import Admin, Members
 from django import forms
 from django.core.validators import RegexValidator
 from django.contrib.auth.hashers import make_password, check_password
+from phone_field import PhoneField
 
 class Adminform(forms.Form):
     name = forms.CharField(max_length=30)
@@ -25,7 +26,7 @@ class MemberForm(forms.Form):
     name = forms.CharField(max_length=30)
     email = forms.EmailField()
     #phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
-    phone = forms.CharField() # Validators should be a list
+    phone = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
     password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
 
@@ -34,11 +35,15 @@ class MemberForm(forms.Form):
         post_email = cleaned_data['email']
         password = cleaned_data.get('password')
         password2 = cleaned_data.get('password2')
-        
+        phone = cleaned_data.get('phone')
+        if len(phone) != 10:
+            raise forms.ValidationError('Enter a valid phone number!')
+        if len(password) < 4:
+            raise forms.ValidationError('Please provide atleast 4 characters in password!') 
         if (Members.objects.filter(email= post_email).exists()):
-            raise forms.ValidationError('Email already exists')
+            raise forms.ValidationError('Email already exists!')
         if password!= password2:
-            raise forms.ValidationError('Passwords do not match')
+            raise forms.ValidationError('Passwords do not match!')
         
 class LoginForm(forms.Form):
     email = forms.EmailField()

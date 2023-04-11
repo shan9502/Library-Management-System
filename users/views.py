@@ -20,7 +20,7 @@ def AdminRegView(request):
             reg = Admin(name = aname, email = email, password = make_password(password))
             reg.save()
             #context = {'form': form}
-            return HttpResponse('<h1>Admin Registered</h1>')
+            return redirect('/user/AdminLogin')
         else:
             #return HttpResponse('<h1>Validatoin Error</h1>')
             context = {'form': form, 'type':'Manager','pagelink':'AdminLogin'}
@@ -43,7 +43,7 @@ def MemberRegView(request):
             reg = Members(name = aname, email = email, password = make_password(password),mobile = phone)
             reg.save()
             #context = {'form': form}
-            return HttpResponse('<h1>Member Registered</h1>')
+            return redirect('/user/MemberLogin')
         else:
             #return HttpResponse('<h1>Validatoin Error</h1>')
             context = {'form': form, 'type':'Member','pagelink':'MemberLogin'}

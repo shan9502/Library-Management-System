@@ -10,7 +10,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-
+import os
 
 # Admin Manage Members View 
 @csrf_exempt
@@ -66,7 +66,7 @@ def DashboardView(request):
             value = json.loads(request.POST['value'])
             transaction = BooksReservations.objects.get(id = Tid)
             book = Books.objects.get(id = transaction.book_id)
-            print(type(value),value)
+            #print(type(value),value)
             
             if value == 1 and book.current_status == 'FREE':
                 transaction.status ='Confirmed'
@@ -184,9 +184,10 @@ def TransactionsView(request):
                     transactions = author
                     context = {'admin':admin,
                     'transactions':transactions}
+            return render(request,'manager/transactions.html', context)
             
         # change reservation status
-        if 'id' in request.POST:
+        elif 'id' in request.POST:
             Tid = json.loads(request.POST['id'])
             value = json.loads(request.POST['value'])
             transaction = BooksReservations.objects.get(id = Tid)
@@ -214,11 +215,14 @@ def TransactionsView(request):
                 #book.current_status = 'FREE'
                 context = {'admin':admin, 
                 'transactions':transactions, 'message':'This Book is Not FREE!'}
-                return render(request,'manager/dashboard.html', context)
+                return render(request,'manager/transactions.html', context)
             transaction.save()
             book.save() 
-            return render(request,'manager/dashboard.html', context)
-        return render(request, 'manager/transactions.html', context)
+            return render(request,'manager/transactions.html', context)
+        else:
+            return render(request, 'manager/transactions.html', context)
+    else:
+        return redirect(request, '/manager/AdminLogin')
 
 # Book View and Add Books Form
 @csrf_exempt
@@ -257,6 +261,7 @@ def deleteBookView(request):
             pk = request.POST.get('pk')
             #print("Book Id:",pk)
             book = Books.objects.get(id=pk)
+            os.remove(str(book.image))
             book.delete()
         return redirect('/manager/books')
 
