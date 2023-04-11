@@ -1,0 +1,30 @@
+stages:
+  - dev-deploy
+
+deployment_dev:
+  stage: dev-deploy
+  script:
+    - sudo supervisorctl stop testzoo
+    - sudo chown -R gitlab-runner:gitlab-runner /var/www/html/Testzoo
+    - cp -av  * /var/www/html/Testzoo
+    - cd /var/www/html/Testzoo
+    - echo "$Testzoo" > .env 
+    - virtualenv -p python3.8 venv
+    - source venv/bin/activate
+    - pip install -r requirements.txt
+    - pip install gunicorn
+    - python manage.py makemigrations --merge --noinput
+    - python manage.py migrate
+    - python manage.py runcrons
+    - deactivate
+    - sudo chown -R web:web media/
+    - sudo supervisorctl reload
+  only:
+    - development
+  tags:
+    - Test
+  environment:
+    name: Dev
+    url: https://zootest-proj1.zoondia.org
+  artifacts:
+    expire_in: 1 hour
