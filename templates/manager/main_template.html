@@ -9,7 +9,7 @@
 
 
 <!-- Sidebar -->
-<div class="container-fluid fixed-top col py-5">
+<div class="container-fluid fixed-top col py-5 sidenav">
   <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
           <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-5 text-white min-vh-100">
@@ -21,7 +21,7 @@
                       </a>
                   </li>
                   <li>
-                      <a href="#" class="nav-link px-0 align-middle">
+                      <a href="/manager/transactions/" class="nav-link px-0 align-middle">
                           <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Transactions</span></a>
                   </li>
                   <li>
@@ -39,8 +39,9 @@
                 </h4>
               </ul>
               <hr>
-          </div>
-      </div>
+        </div>
+    </div>
+  
     
 <!-- Sidebar -->
 
@@ -53,20 +54,19 @@
               Welcome Mr.{{admin.name}}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a href="" class="dropdown-item">Edit profile</a>
+                <a href="/manager/profile/" class="dropdown-item">Edit profile</a>
                 <a href="/manager/adminlogout" class="dropdown-item">Logout</a>
             </div>
         </li>
     </div>
-  </nav>
+</nav>
+
 <!-- Navbar close-->
 {% block content %}
 
 <!-- content here -->
 {% endblock %}
 
-    </div>
-</div>
 
 <!-- Script to avoid form resubmission on refresh -->
 <script>

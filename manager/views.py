@@ -4,7 +4,13 @@ from users.models import Admin
 from django.views.decorators.csrf import csrf_exempt
 from .forms import AddBookForm, SettingsForm
 from django.shortcuts import get_object_or_404
-from datetime import datetime
+import datetime
+import json
+from django.core.mail import send_mail, EmailMultiAlternatives
+from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
 
 # Admin Manage Members View 
 @csrf_exempt
@@ -14,33 +20,205 @@ def ManageMemberView(request):
         id = request.session['AdminId']
         #print("Admin ID:",id)
         admin = Admin.objects.filter(id=id).first()
+        #getting members from database model
+        members = Members.objects.all().order_by('id').reverse()
+        context = {'members':members, 'settings':settings, 'admin':admin}
         if request.method == 'POST':
             if request.POST.get('search'):
                 search = request.POST.get('search')
                 members = Members.objects.filter(name = search)
                 context = {'members':members, 'settings':settings, 'admin':admin}
+            elif request.POST.get('status'):
+                status = request.POST.get('status')
+                if status == '1':
+                    members = Members.objects.filter(status = 1)
+                elif status == '0':
+                    members = Members.objects.filter(status = 0)
+                context = {'members':members, 'settings':settings, 'admin':admin}
             else:              
                 #getting members from database model
-                members = Members.objects.all()
+                members = Members.objects.all().order_by('id').reverse()
                 context = {'members':members, 'settings':settings, 'admin':admin}
         return render(request,'manager/members.html', context)
     else:
-        return redirect('/user/AdminLogin')
+        return redirect('/user/AdminLogin')     
 
 # Admin Dashboard View
+@csrf_exempt
 def DashboardView(request):
     if request.session['Adminlogin'] == True:
-        id = request.session['AdminId']
+        Aid = request.session['AdminId']
         books = Books.objects.all()
         issued = Books.objects.filter(current_status ='BOOKED')
         members = Members.objects.all()
         res_pendings = BooksReservations.objects.filter(status='Pending')
         settings = Settings.objects.filter().latest('id')
-        admin = Admin.objects.filter(id=id).first()
-        context = {'res_pendings':res_pendings,'admin':admin, 'settings':settings, 'books':books, 'issued':issued, 'members':members}  
+        admin = Admin.objects.filter(id=Aid).first()
+        transactions = BooksReservations.objects.filter().order_by('id').reverse()[0:8]
+        # check books on due function call
+        dues_today = checkDuesView()
+        # dueCount = checkDuesView()
+        context = {'res_pendings':res_pendings,'admin':admin, 
+                'settings':settings, 'books':books, 'issued':issued, 
+                'members':members, 'transactions':transactions,'dues':dues_today}
+        if 'id' in request.POST:
+            Tid = json.loads(request.POST['id'])
+            value = json.loads(request.POST['value'])
+            transaction = BooksReservations.objects.get(id = Tid)
+            book = Books.objects.get(id = transaction.book_id)
+            print(type(value),value)
+            
+            if value == 1 and book.current_status == 'FREE':
+                transaction.status ='Confirmed'
+                book.current_status = 'BOOKED'
+                transaction.save()
+                book.save() 
+            elif value == 0:
+                transaction.status ='Returned'
+                book.current_status = 'FREE'
+                transaction.save()
+                book.save() 
+            elif value == 2:
+                transaction.status ='Pending'
+                book.current_status = 'FREE'
+                transaction.save()
+                book.save() 
+            else:
+                print('exception here ----------')
+                #transaction.status ='Pending'
+                #book.current_status = 'FREE'
+                context = {'res_pendings':res_pendings,'admin':admin, 
+                'settings':settings, 'books':books, 'issued':issued, 
+                'members':members, 'transactions':transactions, 'message':'This Book is Not FREE!'}
+                #return render(request,'manager/dashboard.html', context)
+            return render(request,'manager/dashboard.html', context)
         return render(request,'manager/dashboard.html', context)
     else:
         return redirect('../user/AdminLogin')
+
+# check books on due function
+def checkDuesView():
+    counter = 0
+    m_outdays =Settings.objects.filter().latest('id').max_checkout_days
+    today = datetime.date.today()
+    bookingdates = BooksReservations.objects.filter(status = 'Confirmed')
+    for book in bookingdates:
+        if book.booking_date.date()+ datetime.timedelta(days=m_outdays) == today:
+            counter = counter + 1
+    return counter
+
+#Confirm/Pending reservations
+#@csrf_exempt
+# def ManageReservationsView(request):
+#     if request.method == 'POST':
+#         transId = request.POST.get('tid')
+#         value = request.POST.get('value')
+#         reservarions = BooksReservations.objects.filter(id = transId)
+#         books = Books.objects.get(id=reservarions.book_id)
+#         if value == 0:
+#             reservarions.status = 'Confirmed'
+#             books.current_status = 'BOOKED'
+#             reservarions.save()
+#         else:
+#             reservarions.status = 'Pending'
+#             books.current_status = 'FREE'
+#             reservarions.save()
+#         return redirect('/manager/dashboard/')
+
+#Transactions View and manage
+@csrf_exempt
+def TransactionsView(request):
+    if request.session['Adminlogin'] == True:
+        Aid = request.session['AdminId']
+        admin = Admin.objects.filter(id=Aid).first()
+        transactions = BooksReservations.objects.all()
+        
+        context = {'admin':admin,
+                'transactions':transactions}
+        
+        if 'search' in request.POST:
+            search = request.POST['search']
+            status = request.POST['status']
+            if search == "":
+                # search by status
+                if 'status' in request.POST:
+                    status = request.POST['status']
+                    if status == '/Status':
+                        return redirect('/manager/transactions/')
+                    transactions = BooksReservations.objects.filter(status = status)
+                    context = {'admin':admin,
+                        'transactions':transactions}
+                    return render(request, 'manager/transactions.html', context)
+            elif status == 'Pending' or status == 'Confirmed' or status == 'Returned':
+                membername = BooksReservations.objects.filter(member__name = search, status =status)
+                book = BooksReservations.objects.filter(book__title = search, status =status)
+                author = BooksReservations.objects.filter(book__author = search, status =status)
+                if membername:
+                    transactions = membername
+                    context = {'admin':admin,
+                    'transactions':transactions}
+                elif book:
+                    transactions = book
+                    context = {'admin':admin,
+                    'transactions':transactions}
+                elif author:
+                    transactions = author
+                    context = {'admin':admin,
+                    'transactions':transactions}
+                return render(request, 'manager/transactions.html', context)
+            # Transactions search view
+            else:
+                search = request.POST['search']
+                membername = BooksReservations.objects.filter(member__name = search)
+                book = BooksReservations.objects.filter(book__title = search)
+                author = BooksReservations.objects.filter(book__author = search)
+                if membername:
+                    transactions = membername
+                    context = {'admin':admin,
+                    'transactions':transactions}
+                elif book:
+                    transactions = book
+                    context = {'admin':admin,
+                    'transactions':transactions}
+                elif author:
+                    transactions = author
+                    context = {'admin':admin,
+                    'transactions':transactions}
+            
+        # change reservation status
+        if 'id' in request.POST:
+            Tid = json.loads(request.POST['id'])
+            value = json.loads(request.POST['value'])
+            transaction = BooksReservations.objects.get(id = Tid)
+            book = Books.objects.get(id = transaction.book_id)
+            #print(type(value),value)
+            
+            if value == 1 and book.current_status == 'FREE':
+                transaction.status ='Confirmed'
+                book.current_status = 'BOOKED'
+                # transaction.save()
+                # book.save() 
+            elif value == 0:
+                transaction.status ='Returned'
+                book.current_status = 'FREE'
+                # transaction.save()
+                # book.save() 
+            elif value == 2:
+                transaction.status ='Pending'
+                book.current_status = 'FREE'
+                # transaction.save()
+                # book.save() 
+            else:
+                print('exception here ----------')
+                #transaction.status ='Pending'
+                #book.current_status = 'FREE'
+                context = {'admin':admin, 
+                'transactions':transactions, 'message':'This Book is Not FREE!'}
+                return render(request,'manager/dashboard.html', context)
+            transaction.save()
+            book.save() 
+            return render(request,'manager/dashboard.html', context)
+        return render(request, 'manager/transactions.html', context)
 
 # Book View and Add Books Form
 @csrf_exempt
@@ -93,13 +271,16 @@ def editBookView(request,):
             author = request.POST.get('author')
             lang = request.POST.get('lang')
             image = request.FILES.get('image')
+            status = request.POST.get('status')
 
             book = Books.objects.get(id=pk)
             if book:
                 book.title = title
                 book.author = author
                 book.language = lang
-                book.image = image
+                book.current_status = status
+                if image:
+                    book.image = image
                 book.save()
                 return redirect('/manager/books')
         else:
@@ -152,8 +333,17 @@ def SettingsAdminView(request):
                 return render(request,'manager/settings.html', context)
     else:
         return redirect('/user/AdminLogin')
+#admin profile page
+@csrf_exempt
+def ProfileView(request):
+    if request.session['Adminlogin'] == True:
+        admin = Admin.objects.get(id=request.session['AdminId'])
+        settings = Settings.objects.filter().latest('id')
 
-
+        context = {'settings':settings,'admin':admin}
+        return render(request, 'manager/profile.html', context)
+    else:
+        return redirect('/user/AdminLogin')
 
 
 # Random Membership Id Generator
@@ -203,6 +393,14 @@ def EnableMember(request, pk):
                     member = Members.objects.get(id=pk)
                     if member.membership_no == None:
                         member.membership_no = mid
+                        to_email = [member.email]
+                        library = Settings.objects.filter().latest('id')
+                        subject = 'Account Activated'
+                        context = {'member': member, 'settings': library}
+                        html_msg = render_to_string('manager/activation_email.html',context)
+                        plain_msg = strip_tags(html_msg)
+                        send_mail(subject, plain_msg,
+                               settings.EMAIL_HOST_USER, to_email, html_message=html_msg,fail_silently=True)
                     else:
                         pass
                     member.status = 1
@@ -223,3 +421,4 @@ def DisableMember(request, pk):
         return redirect('/manager/manageMembers')
     else:
         return redirect('/user/AdminLogin')
+    

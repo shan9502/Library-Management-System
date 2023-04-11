@@ -1,0 +1,42 @@
+{% extends 'member/base.html' %}
+{% block content %}
+
+<div class="col py-5">
+    <h5 class="card-title text-uppercase mb-0 pt-5 text-center">Issued Books</h5>
+      <div class="col-md-12 pt-3">
+          <div class="card">
+              <div class="table-responsive">
+                <form method="post">
+                  <table class="table no-wrap user-table mb-0">
+                    <thead>
+                      <tr>
+                        <th scope="col" class="border-0 text-uppercase font-medium pl-4">#</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Book Name</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Author</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Reservation Date</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Requested Date</th>
+                        <th scope="col" class="border-0 text-uppercase font-medium">Return Date</th>
+                        <!-- <th scope="col" class="border-0 text-uppercase font-medium">Manage</th> -->
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for data in reservations %}
+                      <tr>
+                        <td>{{forloop.counter}} </td>
+                        <td>{{data.book.title}}</td>
+                        <td>{{data.book.author}}</td>
+                        <td>{{data.booking_date}}</td>
+                        <td>{{data.created_at}}</td>
+                      {% endfor %}
+                      {% for edate in enddates %}
+                        <td>{{edate}}</td>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </form>
+              </div>
+          </div>
+      </div>
+
+
+{% endblock %}
