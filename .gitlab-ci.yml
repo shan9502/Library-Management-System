@@ -15,7 +15,6 @@ deployment_dev:
     - pip install gunicorn
     - python manage.py makemigrations --merge --noinput
     - python manage.py migrate
-    - python manage.py runcrons
     - deactivate
     - sudo chown -R web:web media/
     - sudo supervisorctl reload
