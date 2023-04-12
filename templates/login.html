@@ -31,27 +31,42 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
   <div class="tab-content">
     <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
       <form method="post">
-        {{form.as_p}}
+        <div class="container container-fluid">
+          <label class="form-label" for="form2Example1">Email:</label>
+          {{form.email}}
+        </div><br>
+        <div class="form-outline">
+          <label class="form-label" for="form2Example1">Password:</label>
+          {{form.password}}
+        </div><br>
         <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mb-3">Sign in</button>
-        <a href="../{{pagelink}}" class="nav-link btn btn-outline-primary" id="tab-register" data-mdb-toggle="pill" role="tab"
-        aria-controls="pills-register" aria-selected="false">Register</a>
+          <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+        <div class="text-center">
+            or<br>
+          <h6>Create an account here, <a href="../{{pagelink}}">Register</a></h6>
+        </div>
       </form>
     </div>
+    <!-- Alert content -->
+    {% if msg %}
+    <div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+        {{msg}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    {% endif %}
   </div>
 </div>
 </div>
-<!-- Alert content -->
-{% if msg %}
-<div class="alert alert-warning alert-dismissible fade show text-center" role="alert">
-    {{msg}}
-  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-{% endif %}
 </div>
 </div>
 </div>
 </div>
 </div>
 </section>
+<!-- Script to avoid form resubmission on refresh -->
+<script>
+  if ( window.history.replaceState ) {
+  window.history.replaceState( null, null, window.location.href );
+}
+</script>

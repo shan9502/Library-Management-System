@@ -4,7 +4,7 @@ from .views import ( HomeView, MemberLogoutView ,ReservationsView, BookIssuesVie
 app_name='member'
 
 urlpatterns = [
-    path('home/', HomeView, name='home'),
+    path('', HomeView, name='home'),
     path('memberLogout/', MemberLogoutView, name='memberLogout'),
     path('reservations/', ReservationsView, name='reservations'),
     path('issued/', BookIssuesView, name='issued'),

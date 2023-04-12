@@ -68,19 +68,19 @@ def AdminLoginView(request):
                     request.session['Adminlogin']= True
                     request.session['AdminId'] = admin.id
                     #return HttpResponse('<h1>Admin Login Success</h1>')
-                    return redirect('../../manager/dashboard')
+                    return redirect('/manager/')
                 else:
                     #return HttpResponse('<h1>Password Not Matching</h1>')
-                    context = {'form': form, 'type':'Member', 'msg':'incorrect password','pagelink':'AdminReg'}
+                    context = {'form': form, 'type':'Member', 'msg':'Incorrect password','pagelink':'AdminReg'}
                     return render(None,'login.html', context)
             else:
                 #return HttpResponse('<h1>Email not Matching</h1>')
-                context = {'form': form, 'type':'Member', 'msg':'this email is not registered','pagelink':'AdminReg'}
+                context = {'form': form, 'type':'Member', 'msg':'This email is not registered','pagelink':'AdminReg'}
                 return render(None,'login.html', context) 
         else:
-            context = {'form': form, 'type':'Manager'}
+            context = {'form': form, 'type':'Manager','msg':'Validation Error.'}
             #return render(request,'login.html', context)
-            return HttpResponse('<h1>Validation Error.</h1>')
+            return render(None,'login.html', context) 
     else:
         form = LoginForm()
         context = {'form': form, 'type':'Manager','pagelink':'AdminReg'}
@@ -101,21 +101,25 @@ def MemberLoginView(request):
                 if check_password(password, member.password):
                     #return redirect('home')
                     if member.status == 0:
-                        context = {'form': form, 'type':'Member', 'msg':'please wait until your accout is activated by library manager.','pagelink':'MemberReg'}
+                        context = {'form': form, 'type':'Member', 'msg':'Please wait until your accout is activated by library manager.','pagelink':'MemberReg'}
                         return render(None,'login.html', context)
                     else:
                         request.session['Memberlogin']= True
                         request.session['MemberId'] = member.id
                         #return HttpResponse('<h1>Member Login Success</h1>')
-                        return redirect('/member/home')
+                        return redirect('/')
                 else:
                     #return HttpResponse('<h1>Password Not Matching</h1>')
-                    context = {'form': form, 'type':'Member', 'msg':'incorrect password','pagelink':'MemberReg'}
+                    context = {'form': form, 'type':'Member', 'msg':'Incorrect password','pagelink':'MemberReg'}
                     return render(None,'login.html', context)                   
             else:
                 #return HttpResponse('<h1>Email not Matching</h1>')
-                context = {'form': form, 'type':'Member', 'msg':'this email is not registered','pagelink':'MemberReg'}
+                context = {'form': form, 'type':'Member', 'msg':'This email is not registered','pagelink':'MemberReg'}
                 return render(None,'login.html', context)
+        else:
+            context = {'form': form, 'type':'Member','msg':'Validation Error.'}
+            #return render(request,'login.html', context)
+            return render(None,'login.html', context) 
     else:
         form = LoginForm()
         context = {'form': form, 'type':'Member','pagelink':'MemberReg'}

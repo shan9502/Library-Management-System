@@ -8,7 +8,7 @@ app_name='manager'
 
 urlpatterns = [
     path('manageMembers/', ManageMemberView),
-    path('dashboard/', DashboardView,name='dashboard'),
+    path('', DashboardView,name='dashboard'),
     path('books/', BooksView , name= 'books'),
     path('adminlogout/', AdminLogout,name= 'adminlogout'),
     path('deleteBook/', deleteBookView, name="deleteBook"),
