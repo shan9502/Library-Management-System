@@ -337,6 +337,7 @@ def SettingsAdminView(request):
         try:
             s_id = Settings.objects.filter().latest('id')
             settings = get_object_or_404(Settings, id = s_id.id)
+            settings.id = settings.id + 1
             form = SettingsForm(instance=settings)
         except Settings.DoesNotExist:
             s_id = 0
