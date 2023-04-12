@@ -97,7 +97,10 @@ DATABASES = {
         }
     }
 }
-
+from django.db import connection
+db_name = connection.settings_dict['NAME']
+db_user= connection.settings_dict['USER']
+print("DataBase Name and user:",db_name,",",db_user)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
