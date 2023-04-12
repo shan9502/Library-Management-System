@@ -55,7 +55,9 @@
                         {% endif %}
                       </td>                     
                       <td>
-                          <a href="" value="View">View</a> &nbsp;
+                          <a href="" class="memberview" data-toggle="modal" data-target="#memberView" data-id="{{member.id}}"
+                          data-mid="{{member.membership_no}}" data-name="{{member.name}}" data-email="{{member.email}}" 
+                          data-mobile="{{member.mobile}}" value="View">View</a> &nbsp;
                         {% if member.status == 0 %}
                           <a href="{% url 'manager:enableMember' pk=member.id %}" id="enable">Enable</a>
                         {% elif member.status == 1 %}
@@ -72,21 +74,61 @@
     </div>
 </div>
 </div>
-{% endblock %}
 </div>
-<!-- Add Books Popup-->
-<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+</div>
+<!-- Member View Popup-->
+<div class="modal fade" id="memberView" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">Member View</h4>
+        <h4 class="modal-title w-100 font-weight-bold">Member Details</h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true">&times;</span>
         </button>
+    </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-4" style="display: block; margin-left: 20%;">
+          <label class="text-muted">User Id:</label>
+          <h6 class="memberid"></h6><br>
+          <label class="text-muted">Membership Id:</label>
+          <h6 class="m_id"></h6><br>
+          <label class="text-muted">Name:</label>
+          <h6 class="name"></h6><br>
+          <label class="text-muted">Email:</label>
+          <h6 class="email"></h6><br>
+          <label class="text-muted" for="status">Mobile:</label>
+          <h6 class="mobile"></h6><br>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
       
     </div>
   </div>
 </div>
-<!-- Add Books Popup Close-->
+
+<!-- Member View Popup Close-->
+<script>
+  //jq to edit book
+  $('body').on('click','.memberview',function(e){
+  //console.log(e.target.dataset.title);
+
+  var id = e.target.dataset.id;
+  var m_id = e.target.dataset.mid;
+  var name = e.target.dataset.name;
+  var email = e.target.dataset.email;
+  var mobile = e.target.dataset.mobile;
+  //console.log(image);
+ 
+  $('#memberView').modal('show'); //load modal
+  $('.memberid').html(id);
+  $('.m_id').html(m_id);
+  $('.name').html(name);
+  $('.email').html(email);
+  $('.mobile').html(mobile);
+  });
+</script>
+{% endblock %}
+
