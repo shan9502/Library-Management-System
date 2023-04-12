@@ -17,7 +17,10 @@ import os
 def ManageMemberView(request):
     if 'Adminlogin' in request.session:
         if request.session['Adminlogin'] == True:
-            settings = Settings.objects.filter().latest('id')
+            try:
+                settings = Settings.objects.filter().latest('id')
+            except Settings.DoesNotExist:
+                settings = None
             id = request.session['AdminId']
             #print("Admin ID:",id)
             admin = Admin.objects.filter(id=id).first()
@@ -108,7 +111,10 @@ def DashboardView(request):
 # check books on due function
 def checkDuesView():
     counter = 0
-    m_outdays =Settings.objects.filter().latest('id').max_checkout_days
+    try:
+        m_outdays =Settings.objects.filter().latest('id').max_checkout_days
+    except Settings.DoesNotExist:
+        m_outdays = 0
     today = datetime.date.today()
     bookingdates = BooksReservations.objects.filter(status = 'Confirmed')
     for book in bookingdates:
@@ -239,7 +245,10 @@ def BooksView(request):
     if request.session['Adminlogin'] == True:
         id = request.session['AdminId']
         #print("Admin ID:",id)
-        settings = Settings.objects.filter().latest('id')
+        try:
+            settings = Settings.objects.filter().latest('id')
+        except Settings.DoesNotExist:
+            settings = None
         admin = Admin.objects.filter(id=id).first()
         books = Books.objects.all()
         form = AddBookForm()
@@ -325,9 +334,14 @@ def SearchBookView(request):
 @csrf_exempt
 def SettingsAdminView(request):
     if request.session['Adminlogin'] == True:
-        s_id = Settings.objects.filter().latest('id')
-        settings = get_object_or_404(Settings, id = s_id.id)
-        form = SettingsForm(instance=settings)
+        try:
+            s_id = Settings.objects.filter().latest('id')
+            settings = get_object_or_404(Settings, id = s_id.id)
+            form = SettingsForm(instance=settings)
+        except Settings.DoesNotExist:
+            s_id = 0
+            settings = None
+            form = SettingsForm()
         admin = Admin.objects.get(id=request.session['AdminId'])
         if request.method == 'POST':
             form = SettingsForm(request.POST,instance=settings)
@@ -409,7 +423,10 @@ def EnableMember(request, pk):
                     if member.membership_no == None:
                         member.membership_no = mid
                         to_email = [member.email]
-                        library = Settings.objects.filter().latest('id')
+                        try:
+                            library = Settings.objects.filter().latest('id')
+                        except Settings.DoesNotExist:
+                            library = None
                         subject = 'Account Activated'
                         context = {'member': member, 'settings': library}
                         html_msg = render_to_string('manager/activation_email.html',context)
