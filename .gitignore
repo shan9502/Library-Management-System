@@ -1,2 +1,5 @@
 # environment variable
 .env
+
+#media file
+static/media/*
