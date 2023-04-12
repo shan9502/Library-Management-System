@@ -71,11 +71,11 @@ def AdminLoginView(request):
                     return redirect('/manager/')
                 else:
                     #return HttpResponse('<h1>Password Not Matching</h1>')
-                    context = {'form': form, 'type':'Member', 'msg':'Incorrect password','pagelink':'AdminReg'}
+                    context = {'form': form, 'type':'Manager', 'msg':'Incorrect password','pagelink':'AdminReg'}
                     return render(None,'login.html', context)
             else:
                 #return HttpResponse('<h1>Email not Matching</h1>')
-                context = {'form': form, 'type':'Member', 'msg':'This email is not registered','pagelink':'AdminReg'}
+                context = {'form': form, 'type':'Manager', 'msg':'This email is not registered','pagelink':'AdminReg'}
                 return render(None,'login.html', context) 
         else:
             context = {'form': form, 'type':'Manager','msg':'Validation Error.'}
