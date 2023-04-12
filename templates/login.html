@@ -41,10 +41,12 @@ integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw
         </div><br>
         <!-- Submit button -->
           <button type="submit" class="btn btn-primary btn-block">Sign in</button>
-        <div class="text-center">
-            or<br>
-          <h6>Create an account here, <a href="../{{pagelink}}">Register</a></h6>
-        </div>
+        {% if type == 'Member'%}
+          <div class="text-center">
+              or<br>
+            <h6>Create an account here, <a href="../{{pagelink}}">Register</a></h6>
+          </div>
+        {% endif %}
       </form>
     </div>
     <!-- Alert content -->

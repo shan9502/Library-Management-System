@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class Members(models.Model):
-    id = models.PositiveIntegerField(primary_key=True, auto_created=True)
+    id = models.AutoField(primary_key=True, auto_created=True)
     membership_no = models.CharField(max_length=20, blank=True, null=True)
     name = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
@@ -19,7 +19,7 @@ class Members(models.Model):
         return self.id
     
 class Books(models.Model):
-    id = models.PositiveIntegerField(primary_key=True, auto_created=True)
+    id = models.AutoField(primary_key=True, auto_created=True)
     title = models.CharField(max_length=250)
     author = models.CharField(max_length=100)
     language = models.CharField(max_length=100)
@@ -35,7 +35,7 @@ class Books(models.Model):
         return self.id
 
 class Settings(models.Model):
-    id = models.PositiveIntegerField(primary_key=True,auto_created=True, blank=True)
+    id = models.AutoField(primary_key=True,auto_created=True, blank=True)
     library_name = models.CharField(max_length=200)
     max_checkout_days = models.PositiveIntegerField(max_length=10)
     late_fees = models.FloatField()
@@ -47,7 +47,7 @@ class Settings(models.Model):
         db_table = 'settings'
 
 class BooksReservations(models.Model):
-    id = models.PositiveIntegerField(primary_key=True,auto_created=True, blank=True)
+    id = models.AutoField(primary_key=True,auto_created=True, blank=True)
     book = models.ForeignKey(Books, on_delete=models.CASCADE)
     member = models.ForeignKey(Members, on_delete=models.CASCADE)
     booking_date = models.DateTimeField()

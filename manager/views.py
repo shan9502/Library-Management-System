@@ -15,84 +15,90 @@ import os
 # Admin Manage Members View 
 @csrf_exempt
 def ManageMemberView(request):
-    if request.session['Adminlogin'] == True:
-        settings = Settings.objects.filter().latest('id')
-        id = request.session['AdminId']
-        #print("Admin ID:",id)
-        admin = Admin.objects.filter(id=id).first()
-        #getting members from database model
-        members = Members.objects.all().order_by('id').reverse()
-        context = {'members':members, 'settings':settings, 'admin':admin}
-        if request.method == 'POST':
-            if request.POST.get('search'):
-                search = request.POST.get('search')
-                members = Members.objects.filter(name = search)
-                context = {'members':members, 'settings':settings, 'admin':admin}
-            elif request.POST.get('status'):
-                status = request.POST.get('status')
-                if status == '1':
-                    members = Members.objects.filter(status = 1)
-                elif status == '0':
-                    members = Members.objects.filter(status = 0)
-                context = {'members':members, 'settings':settings, 'admin':admin}
-            else:              
-                #getting members from database model
-                members = Members.objects.all().order_by('id').reverse()
-                context = {'members':members, 'settings':settings, 'admin':admin}
-        return render(request,'manager/members.html', context)
+    if 'Adminlogin' in request.session:
+        if request.session['Adminlogin'] == True:
+            settings = Settings.objects.filter().latest('id')
+            id = request.session['AdminId']
+            #print("Admin ID:",id)
+            admin = Admin.objects.filter(id=id).first()
+            #getting members from database model
+            members = Members.objects.all().order_by('id').reverse()
+            context = {'members':members, 'settings':settings, 'admin':admin}
+            if request.method == 'POST':
+                if request.POST.get('search'):
+                    search = request.POST.get('search')
+                    members = Members.objects.filter(name__icontains=search)
+                    context = {'members':members, 'settings':settings, 'admin':admin}
+                elif request.POST.get('status'):
+                    status = request.POST.get('status')
+                    if status == '1':
+                        members = Members.objects.filter(status = 1)
+                    elif status == '0':
+                        members = Members.objects.filter(status = 0)
+                    context = {'members':members, 'settings':settings, 'admin':admin}
+                else:              
+                    #getting members from database model
+                    members = Members.objects.all().order_by('id').reverse()
+                    context = {'members':members, 'settings':settings, 'admin':admin}
+            return render(request,'manager/members.html', context)
+        else:
+            return redirect('/user/AdminLogin')
     else:
-        return redirect('/user/AdminLogin')     
+            return redirect('/user/AdminLogin')      
 
 # Admin Dashboard View
 @csrf_exempt
 def DashboardView(request):
-    if request.session['Adminlogin'] == True:
-        Aid = request.session['AdminId']
-        books = Books.objects.all()
-        issued = Books.objects.filter(current_status ='BOOKED')
-        members = Members.objects.all()
-        res_pendings = BooksReservations.objects.filter(status='Pending')
-        settings = Settings.objects.filter().latest('id')
-        admin = Admin.objects.filter(id=Aid).first()
-        transactions = BooksReservations.objects.filter().order_by('id').reverse()[0:8]
-        # check books on due function call
-        dues_today = checkDuesView()
-        # dueCount = checkDuesView()
-        context = {'res_pendings':res_pendings,'admin':admin, 
-                'settings':settings, 'books':books, 'issued':issued, 
-                'members':members, 'transactions':transactions,'dues':dues_today}
-        if 'id' in request.POST:
-            Tid = json.loads(request.POST['id'])
-            value = json.loads(request.POST['value'])
-            transaction = BooksReservations.objects.get(id = Tid)
-            book = Books.objects.get(id = transaction.book_id)
-            #print(type(value),value)
-            
-            if value == 1 and book.current_status == 'FREE':
-                transaction.status ='Confirmed'
-                book.current_status = 'BOOKED'
-                transaction.save()
-                book.save() 
-            elif value == 0:
-                transaction.status ='Returned'
-                book.current_status = 'FREE'
-                transaction.save()
-                book.save() 
-            elif value == 2:
-                transaction.status ='Pending'
-                book.current_status = 'FREE'
-                transaction.save()
-                book.save() 
-            else:
-                print('exception here ----------')
-                #transaction.status ='Pending'
-                #book.current_status = 'FREE'
-                context = {'res_pendings':res_pendings,'admin':admin, 
-                'settings':settings, 'books':books, 'issued':issued, 
-                'members':members, 'transactions':transactions, 'message':'This Book is Not FREE!'}
-                #return render(request,'manager/dashboard.html', context)
+    if 'Adminlogin' in request.session:
+        if request.session['Adminlogin'] == True:
+            Aid = request.session['AdminId']
+            books = Books.objects.all()
+            issued = Books.objects.filter(current_status ='BOOKED')
+            members = Members.objects.all()
+            res_pendings = BooksReservations.objects.filter(status='Pending')
+            settings = Settings.objects.filter().latest('id')
+            admin = Admin.objects.filter(id=Aid).first()
+            transactions = BooksReservations.objects.filter().order_by('id').reverse()[0:8]
+            # check books on due function call
+            dues_today = checkDuesView()
+            # dueCount = checkDuesView()
+            context = {'res_pendings':res_pendings,'admin':admin, 
+                    'settings':settings, 'books':books, 'issued':issued, 
+                    'members':members, 'transactions':transactions,'dues':dues_today}
+            if 'id' in request.POST:
+                Tid = json.loads(request.POST['id'])
+                value = json.loads(request.POST['value'])
+                transaction = BooksReservations.objects.get(id = Tid)
+                book = Books.objects.get(id = transaction.book_id)
+                #print(type(value),value)
+                
+                if value == 1 and book.current_status == 'FREE':
+                    transaction.status ='Confirmed'
+                    book.current_status = 'BOOKED'
+                    transaction.save()
+                    book.save() 
+                elif value == 0:
+                    transaction.status ='Returned'
+                    book.current_status = 'FREE'
+                    transaction.save()
+                    book.save() 
+                elif value == 2:
+                    transaction.status ='Pending'
+                    book.current_status = 'FREE'
+                    transaction.save()
+                    book.save() 
+                else:
+                    print('exception here ----------')
+                    #transaction.status ='Pending'
+                    #book.current_status = 'FREE'
+                    context = {'res_pendings':res_pendings,'admin':admin, 
+                    'settings':settings, 'books':books, 'issued':issued, 
+                    'members':members, 'transactions':transactions, 'message':'This Book is Not FREE!'}
+                    #return render(request,'manager/dashboard.html', context)
+                return render(request,'manager/dashboard.html', context)
             return render(request,'manager/dashboard.html', context)
-        return render(request,'manager/dashboard.html', context)
+        else:
+            return redirect('../user/AdminLogin')
     else:
         return redirect('../user/AdminLogin')
 
@@ -144,7 +150,7 @@ def TransactionsView(request):
                 if 'status' in request.POST:
                     status = request.POST['status']
                     if status == '/Status':
-                        return redirect('/manager/transactions/')
+                        return render(request, 'manager/transactions.html', context)
                     transactions = BooksReservations.objects.filter(status = status)
                     context = {'admin':admin,
                         'transactions':transactions}
@@ -169,9 +175,9 @@ def TransactionsView(request):
             # Transactions search view
             else:
                 search = request.POST['search']
-                membername = BooksReservations.objects.filter(member__name = search)
-                book = BooksReservations.objects.filter(book__title = search)
-                author = BooksReservations.objects.filter(book__author = search)
+                membername = BooksReservations.objects.filter(member__name__icontains = search)
+                book = BooksReservations.objects.filter(book__title__icontains= search)
+                author = BooksReservations.objects.filter(book__author__icontains= search)
                 if membername:
                     transactions = membername
                     context = {'admin':admin,
@@ -285,6 +291,7 @@ def editBookView(request,):
                 book.language = lang
                 book.current_status = status
                 if image:
+                    os.remove(str(book.image))
                     book.image = image
                 book.save()
                 return redirect('/manager/books')

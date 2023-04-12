@@ -9,91 +9,94 @@ utc=pytz.UTC
 # Member Home page view
 @csrf_exempt
 def HomeView(request):
-    if request.session['Memberlogin'] == True:
-        MId = request.session['MemberId']
-        member = Members.objects.get(id = MId)
-        books = Books.objects.all().order_by('id').reverse()
-        bookreservatons = BooksReservations.objects.all()
-        m_days= Settings.objects.filter().order_by('id').latest('id')
-        context = {
-                'books': books, 'member': member, 'reserve': bookreservatons
-            }
-        
-        #Ajax getting book id to display the book reservation date
-        if 'id' in request.GET:
-            bookId = json.loads(request.GET.get('id'))
-            print('Book Id:',bookId)
-            book_status =Books.objects.get(id = bookId)
-            bookD = BooksReservations.objects.filter(book_id = bookId, status = 'Pending')
-            if bookD:
-                bookD = BooksReservations.objects.filter(book_id = bookId).order_by('booking_date').latest('id')
-                bookDate = bookD.booking_date + timedelta(days=m_days.max_checkout_days)
-                bookDate = bookDate.strftime('%d/%m/%Y, %H:%M:%S')
-            elif book_status.current_status == 'BOOKED':
-                bookDate = "Please check with manager"
-            else:
-                bookDate = datetime.now().strftime('%d/%m/%Y, %H:%M:%S')
-                bookDate = "Now"
-                print(bookDate)
-            return JsonResponse({"date": bookDate})
-        
-        # For book search option
-        if request.method == 'POST':
-            if request.POST.get('search'):
-                search = request.POST.get('search')
-                books = Books.objects.filter(title__icontains = search)
-                if books:
-                    context = {
-                        'books': books, 'member': member, 'reserve': bookreservatons
-                    }
-                else:
-                    books = Books.objects.filter(author__icontains = search)
-                    context = {
-                        'books': books, 'member': member, 'reserve': bookreservatons
-                    }
-                return render(request,'member/home.html', context)
+    if 'Memberlogin' in request.session:
+        if request.session['Memberlogin'] == True:
+            MId = request.session['MemberId']
+            member = Members.objects.get(id = MId)
+            books = Books.objects.all().order_by('id').reverse()
+            bookreservatons = BooksReservations.objects.all()
+            m_days= Settings.objects.filter().order_by('id').latest('id')
+            context = {
+                    'books': books, 'member': member, 'reserve': bookreservatons
+                }
             
-            #for the booking/Reservaton from member
-            elif request.POST.get('resdate'):
-                bookId = request.POST.get('pk')
-                res_date = request.POST.get('resdate')
-                reserve_check2 = BooksReservations.objects.filter(book_id=bookId, status = 'Pending')
-                mcoutday =  m_days.max_checkout_days
-                
-                # conditoin to check if date is valid (won't allow to select past dates)
-                if datetime.strptime(res_date, '%Y-%m-%dT%H:%M') < datetime.now():
-                    context = {
-                                'books': books, 'member': member, 'reserve': bookreservatons
-                                ,'message':"Please select a valid date for reservation!"
-                            }
+            #Ajax getting book id to display the book reservation date
+            if 'id' in request.GET:
+                bookId = json.loads(request.GET.get('id'))
+                print('Book Id:',bookId)
+                book_status =Books.objects.get(id = bookId)
+                bookD = BooksReservations.objects.filter(book_id = bookId, status = 'Pending')
+                if bookD:
+                    bookD = BooksReservations.objects.filter(book_id = bookId).order_by('booking_date').latest('id')
+                    bookDate = bookD.booking_date + timedelta(days=m_days.max_checkout_days)
+                    bookDate = bookDate.strftime('%d/%m/%Y, %H:%M:%S')
+                elif book_status.current_status == 'BOOKED':
+                    bookDate = "Please check with manager"
                 else:
-                    #data to check if user is already have a booking
-                    reserve_check = BooksReservations.objects.filter(book_id=bookId, member_id=MId, status = 'Pending')
-                
-                    #condition to check if user is already have a booking
-                    if reserve_check:
+                    bookDate = datetime.now().strftime('%d/%m/%Y, %H:%M:%S')
+                    bookDate = "Now"
+                    print(bookDate)
+                return JsonResponse({"date": bookDate})
+            
+            # For book search option
+            if request.method == 'POST':
+                if request.POST.get('search'):
+                    search = request.POST.get('search')
+                    books = Books.objects.filter(title__icontains = search)
+                    if books:
                         context = {
                             'books': books, 'member': member, 'reserve': bookreservatons
-                            ,'message':"You already have a reservation on this book! kindly check your reservations."
                         }
-                    elif ResrvationOverLapCheck(res_date, reserve_check2, mcoutday) == True:
-                        context = {
-                                'books': books, 'member': member, 'reserve': bookreservatons
-                                ,'message':"Reservation is full! Please select an other date."
-                            }
                     else:
-                        booksreservations = BooksReservations(book_id = bookId, member_id = MId, booking_date = res_date)
-                        booksreservations.save()
+                        books = Books.objects.filter(author__icontains = search)
                         context = {
+                            'books': books, 'member': member, 'reserve': bookreservatons
+                        }
+                    return render(request,'member/home.html', context)
+                
+                #for the booking/Reservaton from member
+                elif request.POST.get('resdate'):
+                    bookId = request.POST.get('pk')
+                    res_date = request.POST.get('resdate')
+                    reserve_check2 = BooksReservations.objects.filter(book_id=bookId, status = 'Pending')
+                    mcoutday =  m_days.max_checkout_days
+                    
+                    # conditoin to check if date is valid (won't allow to select past dates)
+                    if datetime.strptime(res_date, '%Y-%m-%dT%H:%M') < datetime.now():
+                        context = {
+                                    'books': books, 'member': member, 'reserve': bookreservatons
+                                    ,'message':"Please select a valid date for reservation!"
+                                }
+                    else:
+                        #data to check if user is already have a booking
+                        reserve_check = BooksReservations.objects.filter(book_id=bookId, member_id=MId, status = 'Pending')
+                    
+                        #condition to check if user is already have a booking
+                        if reserve_check:
+                            context = {
                                 'books': books, 'member': member, 'reserve': bookreservatons
-                                ,'message':"Your reservarion request has been sent successfully."
+                                ,'message':"You already have a reservation on this book! kindly check your reservations."
                             }
-                return render(request, 'member/home.html', context)
+                        elif ResrvationOverLapCheck(res_date, reserve_check2, mcoutday) == True:
+                            context = {
+                                    'books': books, 'member': member, 'reserve': bookreservatons
+                                    ,'message':"Reservation is full! Please select an other date."
+                                }
+                        else:
+                            booksreservations = BooksReservations(book_id = bookId, member_id = MId, booking_date = res_date)
+                            booksreservations.save()
+                            context = {
+                                    'books': books, 'member': member, 'reserve': bookreservatons
+                                    ,'message':"Your reservarion request has been sent successfully."
+                                }
+                    return render(request, 'member/home.html', context)
 
+                else:
+                    return render(request,'member/home.html', context)
             else:
-                return render(request,'member/home.html', context)
+                return render(request, 'member/home.html', context)
         else:
-            return render(request, 'member/home.html', context)
+            return redirect('/user/MemberLogin/')
     else:
         return redirect('/user/MemberLogin/')
     

@@ -14,6 +14,7 @@ from pathlib import Path
 import os
 from decouple import config
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -97,11 +98,6 @@ DATABASES = {
         }
     }
 }
-from django.db import connection
-db_name = connection.settings_dict['NAME']
-db_user= connection.settings_dict['USER']
-db_passwd= connection.settings_dict['PASSWORD']
-print("DataBase Name, user and password:",db_name,",",db_user,",",db_passwd)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
