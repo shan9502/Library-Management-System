@@ -56,7 +56,10 @@ def DashboardView(request):
             issued = Books.objects.filter(current_status ='BOOKED')
             members = Members.objects.all()
             res_pendings = BooksReservations.objects.filter(status='Pending')
-            settings = Settings.objects.filter().latest('id')
+            try:
+                settings = Settings.objects.filter().latest('id')
+            except  Settings.DoesNotExist:
+                settings = None
             admin = Admin.objects.filter(id=Aid).first()
             transactions = BooksReservations.objects.filter().order_by('id').reverse()[0:8]
             # check books on due function call
