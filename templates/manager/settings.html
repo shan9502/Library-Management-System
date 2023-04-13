@@ -2,10 +2,37 @@
 {% block content %}
 
 <div class="container-fluid py-5 p-5">
-    <h4 class="">Update the Library Settings</h4><br>
+    <h4 class="pl-5 pt-4">Update the Library Settings</h4><br>
     <form method="post" action="/manager/settings/">
-        {{form.as_p}}
-        <button type="submit" class="btn btn-primary">Update</button>
+        <div class="container d-flex align-items-center pt-4">
+            <div class="row-md-5">
+                <div class="col">
+                    <Label>Library Name</Label>
+                </div>
+                <div class="col">
+                    {{form.library_name}}
+                </div>
+            </div><br>
+            <div class="row-md-5">
+                <div class="col">
+                    <Label>Maximum Checkout Days</Label>
+                </div>
+                <div class="col">
+                    {{form.max_checkout_days}}
+                </div>
+            </div><br>
+            <div class="row-md-5">
+                <div class="col">
+                    <Label>Late Fines</Label>
+                </div>
+                <div class="col">
+                    {{form.late_fees}}
+                </div>
+            </div>
+            <div class="row-md-5 pt-4 pl-3">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </div>
     </form>
     <!-- Alert content -->
     {% if msg %}

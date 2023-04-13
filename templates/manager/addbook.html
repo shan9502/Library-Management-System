@@ -12,16 +12,40 @@
         </button>
       </div>
       <form class="form-horizontal" enctype="multipart/form-data" id="addbook" method="post">
-        <div class="modal-body mx-3">
-          <div class="md-form mb-4">
-            <label data-error="wrong" data-success="right" for="defaultForm-pass">Title</label>
-            {{form.title}}<br><br>
-            <label data-error="wrong" data-success="right" for="defaultForm-pass">Author</label>
-            {{form.author}}<br><br>         
-            <label data-error="wrong" data-success="right" for="defaultForm-pass">Language</label>
-            {{form.language}}<br><br>          
-            <label data-error="wrong" data-success="right" for="defaultForm-pass">Image</label>
-            {{form.image}}<br><br>
+        <div class="container pt-4 d-flex justify-content-left">
+          <div class="align-self-center">
+            <div class="row mb-4">
+              <div class="col-md-auto ml-auto">
+                <label>Title:</label>
+              </div>
+              <div class="col-md-8">
+                {{form.title}}
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-md-auto ml-auto">
+                <label>Author:</label>
+              </div>
+              <div class="col-md-8">  
+                {{form.author}}
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-md-auto ml-auto">
+                <label>Language:</label>
+              </div>
+              <div class="col-md-8">
+                {{form.language}}
+              </div>
+            </div>
+            <div class="row mb-4">
+              <div class="col-md-auto ml-auto">
+                <label>Image:</label>
+              </div>
+              <div class="col-md-8">
+                {{form.image}}  
+              </div>
+            </div>
           </div>
         </div>
         <div class="modal-footer d-flex justify-content-center">

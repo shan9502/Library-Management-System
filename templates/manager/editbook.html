@@ -11,9 +11,9 @@
             </button>
         </div>
         <form action="/manager/editBook/" class="form-horizontal" enctype="multipart/form-data" id="editbook" method="post">
-          <div class="modal-body mx-3">
-            <div class="md-form mb-4" style="display: block; margin-left: 20%;">
-              <img id="img" src="" width="100" height="120" alt="My image" style="display: block; margin-left: 25%; margin-right: auto;"/><br>
+         <div class="modal-body mx-3">
+            <!-- <div class="md-form mb-4" style="display: block; margin-left: 20%;">
+              <img id="img" src="" width="120" height="140" alt="My image" style="display: block; margin-left: 25%; margin-right: auto;"/><br>
               <input type="hidden" name="pk" id="ebookid" value="">
               <label>Title:</label>
               <input name="title" id="title" value=""><br><br>
@@ -29,6 +29,54 @@
               <br><br>
               <label>Image:</label>
               <input type="file" name="image" accept="image/*">
+            </div> -->
+            <img id="img" src="" width="120" height="140" alt="My image" style="display: block; margin-left: 38%; margin-right: auto;"/>
+            <div class="container pt-4 d-flex justify-content-left">
+              <div class="align-self-center">
+                <div class="row mb-4">
+                  <div class="col-md-auto ml-auto">
+                    <label>Title:</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input name="title" id="title" value="">
+                  </div>
+                </div>
+                <div class="row mb-4">
+                  <div class="col-md-auto ml-auto">
+                    <label>Auhtor:</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input name="author" id="author" value="">
+                  </div>
+                </div>
+                <div class="row mb-4">
+                  <div class="col-md-auto ml-auto">
+                    <label>Language:</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input name="lang" id="lang" value="">
+                  </div>
+                </div>
+                <div class="row mb-4">
+                  <div class="col-md-auto ml-auto">
+                    <label>Status:</label>
+                  </div>
+                  <div class="col-md-8">
+                    <select name="status" id="status">
+                      <option value="FREE">FREE</option>
+                      <option value="BOOKED">BOOKED</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row mb-4">
+                  <div class="col-md-auto ml-auto">
+                    <label>Image:</label>
+                  </div>
+                  <div class="col-md-8">
+                    <input type="file" name="image" accept="image/*">
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="modal-footer d-flex justify-content-center">

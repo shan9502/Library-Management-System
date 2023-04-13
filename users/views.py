@@ -42,8 +42,9 @@ def MemberRegView(request):
             password = form.cleaned_data['password']
             reg = Members(name = aname, email = email, password = make_password(password),mobile = phone)
             reg.save()
-            #context = {'form': form}
-            return redirect('/user/MemberLogin')
+            context = {'type':'Member',
+                       'pagelink':'MemberLogin','msg':'Your Account activation request has been sent to manager'}
+            return redirect(request,'/MemeberLogin/', context) 
         else:
             #return HttpResponse('<h1>Validatoin Error</h1>')
             context = {'form': form, 'type':'Member','pagelink':'MemberLogin'}
@@ -88,7 +89,7 @@ def AdminLoginView(request):
 
 #Member Login Form
 @csrf_exempt  
-def MemberLoginView(request):
+def MemberLoginView(request,msg=None):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -121,6 +122,10 @@ def MemberLoginView(request):
             #return render(request,'login.html', context)
             return render(None,'login.html', context) 
     else:
+        if msg:
+            msg = msg
+        else:
+            msg = False
         form = LoginForm()
-        context = {'form': form, 'type':'Member','pagelink':'MemberReg'}
+        context = {'form': form, 'type':'Member','msg':msg,'pagelink':'MemberReg'}
         return render(request, 'login.html', context)
