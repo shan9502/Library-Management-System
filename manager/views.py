@@ -454,4 +454,43 @@ def DisableMember(request, pk):
         return redirect('/manager/manageMembers')
     else:
         return redirect('/user/AdminLogin')
-    
+
+# Reseervation Actions -----------------------
+# Action Return
+def PendingBookView(request, pk):
+    if request.session['Adminlogin'] == True:
+        if pk:
+            transaction = BooksReservations.objects.get(id=pk)
+            book = Books.objects.get(id = transaction.book_id)
+            transaction.status = 'Pending'
+            book.current_status = 'FREE'
+            transaction.save()
+        return redirect(request,'/manager/transactions/')
+    else:
+        return redirect('/user/AdminLogin')
+# Action Confirm
+def ConfirmBookView(request, pk):
+    if request.session['Adminlogin'] == True:
+        if pk:
+            transaction = BooksReservations.objects.get(id=pk)
+            book = Books.objects.get(id = transaction.book_id)
+            transaction.status = 'Confirmed'
+            book.current_status = 'BOOKED'
+            transaction.save()
+        return redirect(request,'/manager/transactions/')
+    else:
+        return redirect('/user/AdminLogin')
+# Action Return
+def ReturnBookView(request, pk):
+    if request.session['Adminlogin'] == True:
+        if pk:
+            transaction = BooksReservations.objects.get(id=pk)
+            book = Books.objects.get(id = transaction.book_id)
+            transaction.status = 'Returned'
+            book.current_status = 'FREE'
+            transaction.save()
+        return redirect(request,'/manager/transactions/')
+        #return render(request,'member/transaction.html', context)
+    else:
+        return redirect('/user/AdminLogin')
+# Reseervation Actions Close -----------------------

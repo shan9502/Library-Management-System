@@ -17,6 +17,8 @@ def HomeView(request):
             member = Members.objects.get(id = MId)
         else:
             member = {'name': 'Guest'}
+    else:
+    	member = {'name': 'Guest'}
     books = Books.objects.all().order_by('id').reverse()
     bookreservatons = BooksReservations.objects.all()
     m_days= Settings.objects.filter().order_by('id').latest('id')

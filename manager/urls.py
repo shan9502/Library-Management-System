@@ -2,7 +2,9 @@ from django.urls import path
 from .views import (ManageMemberView, DashboardView, 
                     BooksView, AdminLogout, deleteBookView, 
                     SearchBookView, EnableMember, DisableMember,
-                    SettingsAdminView, editBookView, TransactionsView, ProfileView)
+                    SettingsAdminView, editBookView, TransactionsView,
+                    ProfileView, PendingBookView, ConfirmBookView, 
+                    ReturnBookView)
 
 app_name='manager'
 
@@ -20,4 +22,7 @@ urlpatterns = [
     #path(r'^manageReservations/(?P<pk>\d+)/$', ManageReservationsView, name="manageReservations"),
     path('transactions/', TransactionsView,name='transactions'),
     path('profile/', ProfileView,name='profile'),
+    path(r'^pendingBook/(?P<pk>\d+)/$', PendingBookView, name="pendingBook"),
+    path(r'^confirmBook/(?P<pk>\d+)/$', ConfirmBookView, name="confirmBook"),
+    path(r'^returnBook/(?P<pk>\d+)/$', ReturnBookView, name="returnBook"),
 ]
